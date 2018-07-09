@@ -1,0 +1,1145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+	* Licensed to the Apache Software Foundation (ASF) under one
+	* or more contributor license agreements.  See the NOTICE file
+	* distributed with this work for additional information
+	* regarding copyright ownership.  The ASF licenses this file
+	* to you under the Apache License, Version 2.0 (the
+	* "License"); you may not use this file except in compliance
+	* with the License.  You may obtain a copy of the License at
+	* 
+	*   http://www.apache.org/licenses/LICENSE-2.0
+	* 
+	* Unless required by applicable law or agreed to in writing,
+	* software distributed under the License is distributed on an
+	* "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+	* KIND, either express or implied.  See the License for the
+	* specific language governing permissions and limitations
+	* under the License.
+-->
+
+<!--
+	* This file specifies the different concepts that will be detected by
+	* regular expressions. A concept can represent a specfic PHI type (e.g.
+	* DATE) or a PHI type can be represented by several concepts (e.g. 
+	* PHI-ElectronicAddress -> concepts emailDetection ,URLDetection, etc.).
+	* Each concept produces an UIMA-based annotation within the CaS.
+	*
+	* Each regular expression has a confidence value, which indicates how safe
+	* is to consider tha annotation as PHI. This confidence value will be used
+	* for defining the final PHI annots.
+	*
+	* 
+	********* File modified by CHIR VA Deid Team.
+-->
+
+<conceptSet xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://incubator.apache.org/uima/regex"
+	xsi:schemaLocation="concept.xsd">
+
+	<!-- set of variables that are used by some regular expressions -->
+	<variables>
+		<variable name="separator" value="\s{1,3}" />
+		<variable name="sepOPT" value="\s{0,3}" />
+		<variable name="sepDates" value="( ?\n ?| )" />
+		<variable name="sepDatesOPT" value="( ?\n ?| )?" />
+		
+		
+		<variable name="days"
+		value="[Mm][Oo][Nn][Dd][Aa][Yy][Ss]?|[Tt][Uu][Ee][Ss]([Dd][Aa][Yy]|[Dd][Aa][Yy][Ss])?|[Ww][Ee][Dd][Nn][Ee][Ss][Dd][Aa][Yy][Ss]?|[Tt][Hh][Uu][Rr][Ss]([Dd][Aa][Yy]|[Dd][Aa][Yy][Ss])?|[Ff][Rr][Ii][Dd][Aa][Yy][Ss]?|[Ss][Aa][Tt][Uu][Rr][Dd][Aa][Yy][Ss]?|[Ss][Uu][Nn][Dd][Aa][Yy][Ss]?|MO|TU|WED?|TH|FR|SAT?|SU"/>
+		
+		<variable name="months" 
+			value="[Jj][Aa][Nn][Uu][Aa][Rr][Yy]|[Ff][Ee][Bb][Rr][Uu][Aa][Rr][Yy]|[Mm][Aa][Rr][Cc][Hh]|[Aa][Pp][Rr][Ii][Ll]|[Mm][Aa][Yy]|[Jj][Uu][Nn][Ee]|[Jj][Uu][Ll][Yy]|[Aa][Uu][Gg][Uu][Ss][Tt]|[Ss][Ee][Pp][Tt][Ee][Mm][Bb][Ee][Rr]|[Oo][Cc][Tt][Oo][Bb][Ee][Rr]|[Nn][Oo][Vv][Ee][Mm][Bb][Ee][Rr]|[Dd][Ee][Cc][Ee][Mm][Bb][Ee][r]|[Jj][Aa][Nn]|[Ff][Ee][Bb]|[Mm][Aa][Rr]|[Aa][Pp][Rr]|[Jj][Uu][Nn]|[Jj][Uu][Ll]|[Aa][Uu][Gg]|[Ss][Ee][Pp][Tt]?|[Oo][Cc][Tt]|[Nn][Oo][Vv]|[Dd][Ee][Cc]"/>
+		
+		<variable name="contextTelephone"
+		value="[Cc][Aa][Ll][Ll]([Ee][Dd])?(\s[Nn][Uu][Mm][Bb][Ee][Rr])?|[Dd][Ii][Aa][Ll]([Ee][Dd])?(\s[Nn][Uu][Mm][Bb][Ee][Rr])?|([Tt][Ee][Ll][Ee])?[Pp][Hh][Oo][Nn][Ee](\s[Nn][Uu][Mm][Bb][Ee][Rr])?|[Ff][Aa][Xx](\s[Nn][Uu][Mm][Bb][Ee][Rr])?|[Tt][Ee][Ll]|[Cc][Aa][Ll][Ll][Ii][Nn][Gg]|[Cc][Oo][Dd][Ee]"/>
+		
+		<variable name="US_states_abbreANDcomplete"
+		value="AK|AL|AR|AS|AZ|CA|CO|CT|DC|DE|FL|FM|GA|GU|HI|IA|ID|IL|IN|KS|KY|LA|MA|MD|ME|MH|MI|MN|MO|MP|MS|MT|NC|ND|NE|NH|NJ|NM|NV|NY|OH|OK|OR|PA|PR|PW|RI|SC|SD|TN|TX|UT|VA|VI|VT|WA|WI|WV|WY|Ala|Amer\. Samoa|Ariz|Ark|Calif|Colo|Conn|C\.Z\.|D\.C\.|Del|Fla|Ill|Ind|Kans|Mass|Md|Mich|Minn|Miss|Mo|Mont|N\.C\.|N\.Dak|N\. Dak|Nebr|Nev|N\.H\.|N\.J\.|N\.Mex|N\. Mex|N\.Y\.|Ohio|Okla|Ore|Oreg|Pa|P\.R\.|R\.I\.|S\.C\.|S\.Dak|S\. Dak|Tenn|Tex|Utah|Va\.|V\.I\.|Vt|Wash|Wis|Wisc|W\.Va|W\. Va|Wyo|[aA][Ll][Aa][Bb][Aa][Mm][Aa]|[aA][Ll][Aa][Ss][Kk][Aa]|[aA][Mm][Ee][Rr][Ii][Cc][Aa][Nn]\s{1,2}[Ss][Aa][Mm][Oo][Aa]|[aA][Rr][Ii][Zz][Oo][Nn][Az]|[aA][Rr][Kk][Aa][Nn][Ss][Aa][Ss]|[cC][Aa][Ll][Ii][Ff][Oo][Rr][Nn][Ii][Aa]|[cC][Oo][Ll][Oo][Rr][Aa][Dd][Oo]|[cC][Oo][Nn][Nn][Ee][Cc][Tt][Ii][Cc][Uu][Tt]|[dD][Ee][Ll][Aa][Ww][Aa][Rr][Ee]|[dD][Ii][Ss][Tt][Rr][Ii][Cc][Tt]\s{1,2}[Oo][Ff]\s{1,2}[Cc][Oo][Ll][Uu][Mm][Bb][Ii][Aa]|[fF][Ee][Dd][Ee][Rr][Aa][Tt][Ee][Dd]\s{1,2}[Ss][Tt][Aa][Tt][Ee][Ss]\s{1,2}[Oo][Ff]\s{1,2}[Mm][Ii][Cc][Rr][Oo][Nn][Ee][Ss][Ii][Aa]|[fF][Ll][Oo][Rr][Ii][Dd][Aa]|[gG][Ee][Oo][Rr][Gg][Ii][Aa]|[gG][Uu][Aa][Mm]|[hH][Aa][Ww][Aa][Ii][Ii]|[iI][Dd][Aa][Hh][Oo]|[iI][Ll][Ll][Ii][Nn][Oo][Ii][Ss]|[iI][Nn][Dd][Ii][Aa][Nn][Aa]|[iI][Oo][Ww][Aa]|[kK][Aa][Nn][Ss][Aa][Ss]|[kK][Ee][Nn][Tt][Uu][Cc][Kk][Yy]|[lL][Oo][Uu][Ii][Ss][Ii][Aa][Nn][Aa]|[mM][Aa][Ii][Nn][Ee]|[mM][Aa][Rr][Ss][Hh][Aa][Ll][Ll]\s{1,2}[Ii][Ss][Ll][Aa][Nn][Dd][Ss]|[mM][Aa][Rr][Yy][Ll][Aa][Nn][Dd]|[mM][Aa][Ss][Ss][Aa][Cc][Hh][Uu][Ss][Ee][Tt][Tt][Ss]|[mM][Ii][Cc][Hh][Ii][Gg][Aa][Nn]|[mM][Ii][Nn][Nn][Ee][Ss][Oo][Tt][Aa]|[mM][Ii][Ss][Ss]?[Ii][Ss][Ss]?[Ii][Pp][Pp]?[Ii]|[mM][Ii][Ss][Ss][Oo][Uu][Rr][Ii]|[mM][Oo][Nn][Tt][Aa][Nn][Aa]|[nN][Ee][Bb][Rr][Aa][Ss][Kk][Aa]|[nN][Ee][Vv][Aa][Dd][Aa]|[nN][eE][wW]\s{1,2}[Hh][Aa][Mm][Pp][Ss][Hh][Ii][Rr][Ee]|[nN][eE][Ww]\s{1,2}[Jj][Ee][Rr][Ss][Ee][Yy]|[nN][eE][Ww]\s{1,2}[Mm][Ee][Xx][Ii][Cc][Oo]|[nN][Ee][Ww]\s{1,2}[Yy][Oo][rR][Kk]|[nN][Oo][Rr][tT][Hh]\s{1,2}[Cc][Aa][Rr][Oo][Ll][Ii][Nn][Aa]|[nN][Oo][Rr][Tt][Hh]\s{1,2}[Dd][Aa][Kk][Oo][Tt][Aa]|[nN][Oo][Rr][Tt][Hh][Ee][Rr][Nn]\s{1,2}[Mm][Aa][Rr][Ii][Aa][Nn][Aa]\s{1,2}[Ii][Ss][Ll][Aa][Nn][Dd][Ss]|[oO][Hh][Ii][Oo]|[oO][kK][Ll][Aa][Hh][Oo][Mm][Aa]|[oO][Rr][Ee][Gg][Oo][Nn]|[pP][Aa][Ll][Aa][Uu]|[pP][Ee][Nn][Nn][Ss][Yy][Ll][Vv][Aa][Nn][Ii][Aa]|[pP][Uu][Ee][Rr][tT][oO]\s{1,2}[Rr][Ii][Cc][Oo]|[rR][Hh][Oo][Dd][Ee]\s{1,2}[Ii][Ss][Ll][Aa][Nn][Dd]|[sS][Oo][Uu][Tt][Hh]\s{1,2}[Cc][aA][Rr][Oo][Ll][Ii][Nn][Aa]|[sS][Oo][Uu][Tt][Hh]\s{1,2}[Dd][Aa][Kk][Oo][Tt][Aa]|[tT][Ee][Nn][Nn][Ee][Ss][Ss][Ee][Ee]|[tT][Ee][Xx][Aa][S]|[uU][tT][Aa][Hh]|[vV][eE][Rr][Mm][Oo][Nn][Tt]|[vV][Ii][Rr][Gg][Ii][Nn][iI][aA]|[vV][Ii][Rr][Gg][Ii][Nn]\s{1,2}[Ii][Ss][Ll][Aa][Nn][Dd][Ss]|[wW][Aa][Ss][Hh][Ii][Nn][Gg][Tt][Oo][Nn]|[wW][Ee][Ss][Tt]\s{1,2}[Vv][Ii][Rr][Gg][Ii][Nn][Ii][Aa]|[wW][Ii][Ss][Cc][Oo][Nn][Ss][Ii][Nn]|[wW][yY][Oo][Mm][Ii][Nn][Gg]" />
+		
+		<variable name="US_states_complete" value="[aA][Ll][Aa][Bb][Aa][Mm][Aa]|[aA][Ll][Aa][Ss][Kk][Aa]|[aA][Mm][Ee][Rr][Ii][Cc][Aa][Nn]\s{1,2}[Ss][Aa][Mm][Oo][Aa]|[aA][Rr][Ii][Zz][Oo][Nn][Az]|[aA][Rr][Kk][Aa][Nn][Ss][Aa][Ss]|[cC][Aa][Ll][Ii][Ff][Oo][Rr][Nn][Ii][Aa]|[cC][Oo][Ll][Oo][Rr][Aa][Dd][Oo]|[cC][Oo][Nn][Nn][Ee][Cc][Tt][Ii][Cc][Uu][Tt]|[dD][Ee][Ll][Aa][Ww][Aa][Rr][Ee]|[dD][Ii][Ss][Tt][Rr][Ii][Cc][Tt]\s{1,2}[Oo][Ff]\s{1,2}[Cc][Oo][Ll][Uu][Mm][Bb][Ii][Aa]|[fF][Ee][Dd][Ee][Rr][Aa][Tt][Ee][Dd]\s{1,2}[Ss][Tt][Aa][Tt][Ee][Ss]\s{1,2}[Oo][Ff]\s{1,2}[Mm][Ii][Cc][Rr][Oo][Nn][Ee][Ss][Ii][Aa]|[fF][Ll][Oo][Rr][Ii][Dd][Aa]|[gG][Ee][Oo][Rr][Gg][Ii][Aa]|[gG][Uu][Aa][Mm]|[hH][Aa][Ww][Aa][Ii][Ii]|[iI][Dd][Aa][Hh][Oo]|[iI][Ll][Ll][Ii][Nn][Oo][Ii][Ss]|[iI][Nn][Dd][Ii][Aa][Nn][Aa]|[iI][Oo][Ww][Aa]|[kK][Aa][Nn][Ss][Aa][Ss]|[kK][Ee][Nn][Tt][Uu][Cc][Kk][Yy]|[lL][Oo][Uu][Ii][Ss][Ii][Aa][Nn][Aa]|[mM][Aa][Ii][Nn][Ee]|[mM][Aa][Rr][Ss][Hh][Aa][Ll][Ll]\s{1,2}[Ii][Ss][Ll][Aa][Nn][Dd][Ss]|[mM][Aa][Rr][Yy][Ll][Aa][Nn][Dd]|[mM][Aa][Ss][Ss][Aa][Cc][Hh][Uu][Ss][Ee][Tt][Tt][Ss]|[mM][Ii][Cc][Hh][Ii][Gg][Aa][Nn]|[mM][Ii][Nn][Nn][Ee][Ss][Oo][Tt][Aa]|[mM][Ii][Ss][Ss]?[Ii][Ss][Ss]?[Ii][Pp][Pp]?[Ii]|[mM][Ii][Ss][Ss][Oo][Uu][Rr][Ii]|[mM][Oo][Nn][Tt][Aa][Nn][Aa]|[nN][Ee][Bb][Rr][Aa][Ss][Kk][Aa]|[nN][Ee][Vv][Aa][Dd][Aa]|[nN][eE][wW]\s{1,2}[Hh][Aa][Mm][Pp][Ss][Hh][Ii][Rr][Ee]|[nN][eE][Ww]\s{1,2}[Jj][Ee][Rr][Ss][Ee][Yy]|[nN][eE][Ww]\s{1,2}[Mm][Ee][Xx][Ii][Cc][Oo]|[nN][Ee][Ww]\s{1,2}[Yy][Oo][rR][Kk]|[nN][Oo][Rr][tT][Hh]\s{1,2}[Cc][Aa][Rr][Oo][Ll][Ii][Nn][Aa]|[nN][Oo][Rr][Tt][Hh]\s{1,2}[Dd][Aa][Kk][Oo][Tt][Aa]|[nN][Oo][Rr][Tt][Hh][Ee][Rr][Nn]\s{1,2}[Mm][Aa][Rr][Ii][Aa][Nn][Aa]\s{1,2}[Ii][Ss][Ll][Aa][Nn][Dd][Ss]|[oO][Hh][Ii][Oo]|[oO][kK][Ll][Aa][Hh][Oo][Mm][Aa]|[oO][Rr][Ee][Gg][Oo][Nn]|[pP][Aa][Ll][Aa][Uu]|[pP][Ee][Nn][Nn][Ss][Yy][Ll][Vv][Aa][Nn][Ii][Aa]|[pP][Uu][Ee][Rr][tT][oO]\s{1,2}[Rr][Ii][Cc][Oo]|[rR][Hh][Oo][Dd][Ee]\s{1,2}[Ii][Ss][Ll][Aa][Nn][Dd]|[sS][Oo][Uu][Tt][Hh]\s{1,2}[Cc][aA][Rr][Oo][Ll][Ii][Nn][Aa]|[sS][Oo][Uu][Tt][Hh]\s{1,2}[Dd][Aa][Kk][Oo][Tt][Aa]|[tT][Ee][Nn][Nn][Ee][Ss][Ss][Ee][Ee]|[tT][Ee][Xx][Aa][S]|[uU][tT][Aa][Hh]|[vV][eE][Rr][Mm][Oo][Nn][Tt]|[vV][Ii][Rr][Gg][Ii][Nn][iI][aA]|[vV][Ii][Rr][Gg][Ii][Nn]\s{1,2}[Ii][Ss][Ll][Aa][Nn][Dd][Ss]|[wW][Aa][Ss][Hh][Ii][Nn][Gg][Tt][Oo][Nn]|[wW][Ee][Ss][Tt]\s{1,2}[Vv][Ii][Rr][Gg][Ii][Nn][Ii][Aa]|[wW][Ii][Ss][Cc][Oo][Nn][Ss][Ii][Nn]|[wW][yY][Oo][Mm][Ii][Nn][Gg]" />
+		
+		<variable name="US_states_abbr"
+		value="AK|AL|AR|AS|AZ|CA|CO|CT|DC|DE|FL|FM|GA|GU|HI|IA|ID|IL|IN|KS|KY|LA|MA|MD|ME|MH|MI|MN|MO|MP|MS|MT|NC|ND|NE|NH|NJ|NM|NV|NY|OH|OK|OR|PA|PR|PW|RI|SC|SD|TN|TX|UT|VA|VI|VT|WA|WI|WV|WY|Ala|Amer\. Samoa|Ariz|Ark|Calif|Colo|Conn|C\.Z\.|D\.C\.|Del|Fla|Ill|Ind|Kans|Mass|Md|Mich|Minn|Miss|Mo|Mont|N\.C\.|N\.Dak|N\. Dak|Nebr|Nev|N\.H\.|N\.J\.|N\.Mex|N\. Mex|N\.Y\.|Ohio|Okla|Ore|Oreg|Pa|P\.R\.|R\.I\.|S\.C\.|S\.Dak|S\. Dak|Tenn|Tex|Utah|Va\.|V\.I\.|Vt|Wash|Wis|Wisc|W\.Va|W\. Va|Wyo" />
+		
+		<variable name="Countries_2w" value="[Aa]merican\s{1,2}[Ss]amoa|[Cc]artier\s{1,2}[Ii]slands|[Bb]assas\s{1,2}da\s{1,2}[Ii]ndia|[Bb]ouvet\s{1,2}[Ii]sland|[bB]urkina\s{1,2}[fF]aso|[cC]ape\s{1,2}[vV]erde|[cC]ayman\s{1,2}[iI]slands|[cC]entral\s{1,2}[aA]frican\s{1,2}[rR]epublic|[cC]lipperton\s{1,2}[iI]sland|[cC]osta\s{1,2}[rR]ica|[cC]zech\s{1,2}[rR]epublic|[dD]ominican\s{1,2}[rR]epublic|[eE]l\s{1,2}[sS]alvador|[eE]quatorial\s{1,2}[gG]uinea|[fF]aroe\s{1,2}[iI]slands|[hH]ong\s{1,2}[kK]ong|[nN]orth\s{1,2}[kK]orea|[sS]outh\s{1,2}[kK]orea|[nN]ew\s{1,2}[cC]aledonia|[nN]ew\s{1,2}[zZ]ealand|[pP]uerto\s{1,2}[rR]ico|[aA]rabia\s{1,2}[sS]audi|[sS]aint\s{1,2}[hH]elena|[sS]an\s{1,2}[mM]arino|[sS]audi\s{1,2}[aA]rabia|[sS]erbia\s{1,2}and\s{1,2}[mM]ontenegro|[sS]ierra\s{1,2}[lL]eone|[sS]olomon\s{1,2}[iI]slands|[sS]outh\s{1,2}[aA]frica|[sS]outh\s{1,2}[gG]eorgina|[sS]ri\s{1,2}[lL]anka|[uU]nited\s{1,2}[sS]tates\s{1,2}of\s{1,2}[aA]merica|[uU]nited\s{1,2}[sS]tates|[uU]nited\s{1,2}[aA]rab\s{1,2}[eE]mirates|[uU]nited\s{1,2}[kK]ingdom|[wW]ake\s{1,2}[iI]sland|[sS]outh\s{1,2}[aA]merica|[nN]orth\s{1,2}[aA]merica|[vV]iet\s{1,2}[nN]am|[Ii]rag\/[Aa]fghan|AMERICAN\s{1,2}SAMOA|CARTIER\s{1,2}ISLANDS|BASSAS\s{1,2}DA\s{1,2}INDIA|BOUVET\s{1,2}ISLAND|BURKINA\s{1,2}FASO|CAPE\s{1,2}VERDE|CAYMAN\s{1,2}ISLANDS|CENTRAL\s{1,2}AFRICAN\s{1,2}REPUBLIC|CLIPPERTON\s{1,2}ISLAND|COSTA\s{1,2}RICA|CZECH\s{1,2}REPUBLIC|DOMINICAN\s{1,2}REPUBLIC|EL\s{1,2}SALVADOR|EQUATORIAL\s{1,2}GUINEA|FAROE\s{1,2}ISLANDS|HONG\s{1,2}KONG|NORTH\s{1,2}KOREA|SOUTH\s{1,2}KOREA|NEW\s{1,2}CALEDONIA|NEW\s{1,2}ZEALAND|PUERTO\s{1,2}RICO|ARABIA\s{1,2}SAUDI|SAINT\s{1,2}HELENA|SAN\s{1,2}MARINO|SAUDI\s{1,2}ARABIA|SERBIA\s{1,2}AND\s{1,2}MONTENEGRO|SIERRA\s{1,2}LEONE|SOLOMON\s{1,2}ISLANDS|SOUTH\s{1,2}AFRICA|SOUTH\s{1,2}GEORGINA|SRI\s{1,2}LANKA|UNITED\s{1,2}STATES\s{1,2}OF\s{1,2}AMERICA|UNITED\s{1,2}STATES|UNITED\s{1,2}ARAB\s{1,2}EMIRATES|UNITED\s{1,2}KINGDOM|WAKE\s{1,2}ISLAND|SOUTH\s{1,2}AMERICA|NORTH\s{1,2}AMERICA|VIET\s{1,2}NAM|VN|New\s{1,2}Zealand|NEW\s{1,2}ZEALAND" />
+		
+		<variable name="HCProvider_pretriggers"
+		value="[Aa][Uu][Tt][Hh][Oo][Rr] ?\:|[Ss][Tt][Aa][Ff][Ff] ?\:|[Ss][Uu][Rr][Gg][Ee][Oo][Nn] ?\:|[Aa][Tt][Tt][Ee][Nn][Dd][Ii][Nn][Gg] ?\:|[Aa][Ss][Ss][Ii][Ss][Tt][Aa][Nn][Tt] ?\:|[Tt][Ee][Cc][Hh][Nn][Ii][Cc][Ii][Aa][Nn] ?\:|[Pp][Rr][Oo][Vv][Ii][Dd][Ee][Rr] ?\:|[Pp][Rr][Aa][Cc][Tt][Ii][Tt][Ii][Oo][Nn][Ee][Rr] ?\:|[Pp][Hh][Yy][Ss][Ii][Cc][Ii][Aa][Nn] ?\:|M\.?D\.? ?\:|[Cc][Aa][Rr][Ee][Gg][Ii][Vv][Ee][Rr]" />
+		
+		<variable name="HCProvider_posttriggers"
+		value="M\.?D\.?|R\.?N\.?|L\.?C\.?S\.?W\.?|N\.?P\.?|H\.?B\.?P\.?C\.?" />
+		
+		<!-- potential names: 'Aaa, AA. Aaaa'
+		'Aaaa,Aaaa', 'Aaaa Aaaa', 'Aaaa A Aaaa',
+		'Aaaa Aaaa A', 'A. Aaaa' -->
+		<variable name="potentialNames" value="[A-Z][a-zA-Z]+[\, ] ?[A-Z]{1,2}\.? [A-Z][a-zA-Z]+( [A-Z][a-zA-Z]+)?|[A-Z][a-zA-Z]+[\, ] ?[A-Z][a-zA-Z]+( [A-Z]{1,2}\.?)?( [A-Z][A-Za-z]+)?|[A-Z]{1,2}\. [A-Z][A-Za-z]+( [A-Z][a-zA-Z]+)?" />
+		
+		<variable name="potentialRelativeNameIndicators" value="[Dd][Aa][Uu][Gg][Hh][Tt][Ee][Rr][Ss]?|[Ss][Oo][Nn][Ss]?|[Bb][Rr][Oo][Tt][Hh][Ee][Rr][Ss]?|[Ss][Ii][Ss][Tt][Ee][Rr][Ss]?|[Mm][Oo][Tt][Hh][Ee][Rr]|[Mm][Oo][Mm]|[Ff][Aa][Tt][Hh][Ee][Rr]|[Dd][Aa][Dd]|[Ww][Ii][Ff][Ee]|[Hh][Uu][Ss][Bb][Aa][Nn][Dd]|[Nn][Ee][Ii][Cc][Ee]|[Nn][Ee][Pp][Hh][Ee][Ww]|[Ss][Pp][Oo][Uu][Ss][Ee]|[Pp][Aa][Rr][Tt][Nn][Ee][Rr]|[Cc][Oo][Uu][Ss][Ii][Nn]|[Aa][Uu][Nn][Tt]|[Uu][Nn][Cc][Ll][Ee]|[Gg][Rr][Aa][Nn][Dd][Dd][Aa][Uu][Gg][Hh][Tt][Ee][Rr]|[Gg][Rr][Aa][Nn][Dd][Ss][Oo][Nn]|[Gg][Rr][Aa][Nn][Dd][Mm][Oo][Tt][Hh][Ee][Rr]|[Gg][Rr][Aa][Nn][Dd][Mm][Oo][Mm]|[Gg][Rr][Aa][Nn][Dd][Ff][Aa][Tt][Hh][Ee][Rr]|[Gg][Rr][Aa][Nn][Dd][Dd][Aa][Dd]|[Ff][rR][Ii][Ee][Nn][Dd][Ss]?|[Nn][Ee][Ii][Gg][Hh][Bb][Oo][Rr]|[Vv][Ii][Ss][Ii][Tt][Oo][Rr]|[Cc][Oo]\-?[Ww][Oo][Rr][Kk][Ee][Rr]|[Bb][Oo][Yy][Ff][Rr][Ii][Ee][Nn][Dd]|[Gg][Ii][Rr][Ll][Ff][Rr][Ii][Ee][Nn][Dd]|[Ss][Ii][Gg][Nn][Ii][Ff][Ii][Cc][Aa][Nn][Tt] [Oo][Tt][Hh][Ee][Rr]|([Ss][Ii][Ss][Tt][Ee][Rr]|[Bb][Rr][Oo][Tt][Hh][Ee][Rr]|[Ss][Oo][Nn]|[Dd][Aa][Uu][Gg][Hh][Tt][Ee][Rr]|[Mm][Oo][Tt][Hh][Ee][Rr]|[Ff][Aa][Tt][Hh][Ee][Rr])\-[Ii][Nn]\-[Ll][Aa][Ww]" />
+		
+		<variable name="potentialNameIndicators" value="[Ss][Uu][Rr][Nn][Aa][Mm][Ee]|([Ll][Aa][Ss][Tt] ?)?[Nn][Aa][Mm][Ee]( [Ii][Ss])|[Jj][Rr]\.?" />
+		
+		<variable name="loc_indicators" value="lives in|resident of|lived in|lives at|comes from|called from|visited from|arrived from|returned to" />
+		
+		<variable name="loc_indicators_suff" value="[Aa]venue|AVE|[Cc]ity|[Tt]own|[Bb]each|[Vv]alley|[Cc]ounty|[Hh]arbor|[Vv]ille|[Cc]reek|[Ss]prings|[Mm]ountain|[Ii]sland|[Ll]ake|[Ll]akes|[Ss]hore|[Gg]arden|[Hh]aven|[Vv]illage|[Gg]rove|[Hh]ills|[Hh]ill|[Ss]hire|[Cc]ove|[Cc]oast|[Aa]lley|[Ss]treet|[Tt]errace|[Bb]oulevard|[Pp]arkway|[Hh]ighway|[Tt]ower" />
+
+		<variable name="loc_indicators_pre" value="[Cc][Aa][Pp][Ee]|[Ff][Oo][Rr][Tt]|[Ll][Aa][Kk][Ee]|[Mm][Oo][Uu][Nn][Tt]|[Ss][Aa][Nn][Tt][Aa]|[Ll][Oo][Ss]|[Ee][Aa][Ss][Tt]|[Ww][Ee][Ss][Tt]|[Nn][Oo][Rr][Tt][Hh]|[Ss][Oo][Uu][Tt][Hh]" />
+
+		<variable name="age_indicators_suff" value="year old|yrs|y\. o\.|y\.o\.|yo|y|years old|year-old|-year-old|years-old|-years-old|years of age|yrs of age" />
+
+		<variable name="age_indicators_pre" value="age|[Hh]e is|[Ss]he is|[Pp]atient is|[Pp]t is|died at|died @|died" />
+
+		<variable name="HCUN_post_triggers" value="[Vv][Aa]\s{1,2}[Ss][Yy][Ss][Tt][Ee][Mm]|[Vv][Aa]\s{1,2}[Ll][Aa][Bb]([Oo][Rr][Aa][Tt][Oo][Rr][Yy])?|[Ss]urgery\s{1,2}[Cc]enter|SURGERY\s{1,2}CENTER|[Ss]urgery|[Hh]ealth(care)?\s{1,2}[Ss]ystem|HEALTH(CARE)?\s{1,2}SYSTEM|[Hh]ealth(care)?\s{1,2}[Cc]ommunity|HEALTH(CARE)?\s{1,2}COMMUNITY|[Hh]ealth[Cc]are|HEALTHCARE|[Cc]are\s{1,2}[Cc]enter|CARE\s{1,2}CENTER|[Cc]are\s{1,2}[Cc]ommunity|CARE\s{1,2}COMMUNITY|[Hh]ealth\s{1,2}[Cc]enter|HEALTH\s{1,2}CENTER|[Mm]edical\s{1,2}[Cc]enter|MEDICAL\s{1,2}CENTER|[Vv][Aa][Mm][CC]|[Hh]ealth\s{1,2}[Cc]linic|HEALTH\s{1,2}CLINIC|[Dd]\/[Oo]\s{1,2}[Cc]linic|[Cc]linics?|[Tt]eledermatology|TELEDERMATOLOGY|[Hh][Cc][Ss]|[Hh]ealth[Cc]are\s{1,2}[Ss]ystem|HEALTH\s{1,2}CARE\s{1,2}SYSTEM|[Hh]ealth\s{1,2}[Cc]are|HEALTH\s{1,2}CARE|[Mm]ental\s{1,2}[Hh]ealth|MENTAL\s{1,2}HEALTH|[Hh]ealth\s{1,2}[Ss]ystem\s{1,2}[Ss]leep\s{1,2}[Cc]enter|HEALTH\s{1,2}SYSTEM\s{1,2}SLEEP\s{1,2}CENTER|Health|[Uu]niversity\s{1,2}[Hh]ospital|UNIVERSITY\s{1,2}HOSPITAL|[Hh]ospital|HOSPITAL|Hosp|[Ww]aiting\s{1,2}[Rr]oom|WAITING\s{1,2}ROOM|[Ee]ye\s{1,2}[Cc]are|EYE\s{1,2}CARE|Cancer\s{1,2}Institute|CANCER\s{1,2}INSTITUTE|[Tt]herapy|[Cc]ounselor|Regional|[Cc]are\s{1,2}[Uu]nit|Unit|Triage|[Cc]are\s{1,2}[Pp]rogram|[Pp]rogram(s)?|Hall|AFB|CBOC|[cC]ounseling\s{1,2}[Cc]enter|COUNSELING\s{1,2}CENTER|[Ii]nstitute|INSTITUTE|[Dd]epartment|DEPARTMENT" />
+		
+		<variable name="sure_deployment_from_training" value="OIF\/OEF|EOF\/OIF|OEF\/OIF|[oO]peration\s+[iI]raqi\s+[fF]reedom\s+\(OIF\)|[oO]peration\s+[eE]nduring\s+[fF]reedom\s+\(OEF\)|[oO]peration\s+[iI]raqi\s+[fF]reedom|[oO]peration\s+[eE]nduring\s+[fF]reedom|OIF|OEF|[oO]peration\s+[Ii]n\s+[Dd]uring\s+[fF]reedom|[0-9]+(st|nd|rd|th)?\s+[Aa]irborne|[aA]rmy\s+[eE]ngineers|[Cc]ombat\s+[Ee]ngineers|Camp\s+Robinson|[Cc]ounter\s+[Ii]ntellegience\s+[Oo]fficer|Desert\s+Storm|E-5|E-7\s+communications\s+sergeant|E-7\s+weapons\s+safety\s+sergeant|E-7|E-9|E-[Tt]roop|E4|(FE|F\.E\.)\s+Warren\s+Air\s+Force(\s+Base)?|FOB\s+Freedom|Fort\s+Harrison|[Ii]nfantry|Iraq&amp;Afghan|Malmstrom\s+AFB|Military\s+[Pp]olice|MOS-95\s+Bravo|MP|Navy\s+[Cc]orman|Pacific|Persian\s+Gulf|Persian|[Rr]ank\s+[Ee]5|SFC|Warrant\s+[Oo]fficer|World\s+War\s+II|WWII|([Ee]-\d\s+)?[Ss]ecurity\s+[Ff]orces|GWOT|[Bb][Ee][Tt][Aa]\s+\d-\d|([Ff][Ii][Rr][Ee][Bb][Aa][Ss][Ee][Ss]?\s+)?[Aa][Ll][Pp][Hh][Aa]\s+\d-\d|[Oo]peration\s+[Bb]aby\s+[Ll]ift|P\.Gulf" />
+		
+		<variable name="deployment_post_triggers" value="[Ww][Aa][Rr]|AFB|Air\s+Force\s+Base|AIR\s+FORCE\s+BASE|Forces?|FORCES?|[Ii]nfantry|INFANTRY" />
+		
+		<variable name="deployment_pre_triggers" value="[Aa][Rr][Mm][Yy]|Navy|NAVY|Camp|CAMP|FORT|Fort|F[tT]\." />
+		
+		<variable name="otherorg_post_triggers" value="L[Tt][Dd]\.?|C[Oo][Rr][Pp]\.?|C[Oo]\.?|I[Nn][Cc]\.?|House|Association|Insurance|Society|Bank and Trust|Bank|[Cc]ompany|[Cc]ompanies|[Oo]rganization|Commission|Depot|Group|Corporation|Service(s)?|Store|Task\s{1,3}Force|Specialists|[Ff]actory" />
+		
+		<variable name="otherorg_pre_triggers_in" value="Bank\s+of|American|Archives\s+of|National|College\s+of|Journal\s+of" />
+		
+		<variable name="otherorg_pre_triggers_out" value="work(ed)?\s+for\s\s?\s?([Tt]he)?|employed\s\s?\s?by\s\s?\s?([Tt]he)?|employed\s\s?\s?as\s\s?\s?a|work(ed)?\s\s?\s?at" />
+		
+		<variable name="otherorg_middle" value="Service(s)?|Rescue" />
+		
+		<variable name="otherorg_religious" value="Mormon(\s+Church)?|Catholic(\s+Church)?|Southern\s+Baptist\s+Convention|United\s+Methodist\s+Church|Church\s+of\s+Jesus\s+Christ\s+of\s+Latter-day\s+Saints|Church\s+of\s+God\s+in\s+Christ|Methodist|Jehovah(\'s)?\s+Witness|Presbyterian|Mormom|Baptist|Methodist|MORMON\s+CHURCH|CATHOLIC\s+CHURCH|SOUTHERN\s+BAPTIST\s+CONVENTION|UNITED\s+METHODIST\s+CHURCH|CHURCH\s+OF\s+JESUS\s+CHRIST\s+OF\s+LATTER-DAY\s+SAINTS|CHURCH\s+OF\s+GOD\s+IN\s+CHRIST|METHODIST|JEHOVAH(\'S)?\s+WITNESS|PRESBYTERIAN|MORMOM|BAPTIST|METHODIST|CATHOLIC|[pP]resbyterian|[pP]rotestents?|PROTESTENTS?|[dD]emocrats?|DEMOCRATS?|[rR]epublicans?|REPUBLICANS?" />
+		
+		<variable name="seasons" value="[Aa]utumn|[Ff]all|[Ss]ummer|[Ww]inter|[Ss]pring" />
+		
+		<variable name="holidays" value="[Nn][Ee][Ww] [Yy][Ee][Aa][Rr]\'?[Ss]?( [Dd][Aa][Yy])?|
+		[Mm][Aa][Rr][Tt][Ii][Nn] [Ll][Uu][Tt][Hh][Ee][Rr] [Kk][Ii][Nn][Gg]\'?[Ss]?( [Dd][Aa][Yy])?|
+		[Pp][Rr][Ee][Ss][Ii][Dd][Ee][Nn][Tt]\'?[Ss]? [Dd][Aa][Yy]|[Mm][Ee][Mm][Oo][Rr][Ii][Aa][Ll] [Dd][Aa][Yy]|[Ii][Nn][Dd][Ee][Pp][Ee][Nn][Dd][Ee][Nn][Cc][Ee] [Dd][Aa][Yy]|[Ll][Aa][Bb][Oo][Rr] [Dd][Aa][Yy]|[Cc][Oo][Ll][Uu][Mm][Bb][Uu][Ss] [Dd][Aa][Yy]|[Vv][Ee][Tt][Ee][Rr][Aa][Nn][Ss] [Dd][Aa][Yy]|[Tt][Hh][Aa][Nn][Kk][Ss]?[Gg][Ii][Vv][Ii][Nn][Gg]\'?[Ss]?( [Dd][Aa][Yy])?|[Cc][Hh][Rr][Ii][Ss][Tt][Mm][Aa][Ss]\'?[Ss]?( [Dd][Aa][Yy])?" />
+		
+		<variable name="hms_locs" value="[sS]t|[sS]treet|[aA]venue|[aA]ve|[Bb]lvd|[bB]oulevard|[sS]uite|[pP]ark|[dD]rive|[dD]r|[lL]ane|[lL]n|[Ww]ay|[Pp]ky|[pP]arkway|[Rr]oute|rt|RT|Rt|[rR]oad|[rR]d|[pP]ass|Square|Sq|[Pp]laza|[lL]ink|[bB]end|[gG]ardens?|[cC]ircle|[rR]ow|[tT]urn|[hH]wy|[hH]ighway|[cC]ir|[cC]ourt|[cC]rossing|[tT]rail|[rR]un|[pP]ike|[tT]errace|Place|[pP]l|[lL]oop|[pP]arade|[aA]lley|ST|STREET|AVENUE|AVE|BLVD|BOULEVARD|SUITE|PARK|DRIVE|DR|LANE|LN|WAY|PKY|PARKWAY|ROUTE|RT|ROAD|RD|PASS|SQUARE|PLAZA|LINK|BEND|GARDENS?|CIRCLE|ROW|TURN|HWY|HIGHWAY|CIR|COURT|CROSSING|TRAIL|RUN|PIKE|TERRACE|PLACE|PL|LOOP|PARADE|ALLEY" />
+	</variables>
+
+	<!-- CONCEPT FOR PHI TYPE ELECTRONICADDRESS (Detection of emails) -->
+	<concept name="emailDetection" processAllRules="false">
+		<rules>
+		
+			<rule ruleId="default-email"
+				regEx="([a-zA-Z0-9!#$%*+'/=?^_\x2D`{|}~.\x26]+)@([a-zA-Z0-9._-]+[a-zA-Z]{2,4})"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation" 
+				confidence="1.0" />
+				
+			<rule ruleId="mit-email"
+				regEx="\b[\w\.]+\w ?@ ?\w+[\.\w+]\.\w{2,3}\b"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation" 
+				confidence="1.0" />
+				
+			<rule ruleId="hms-email"
+				regEx="\b([a-zA-Z0-9_\-])+(\.([a-zA-Z0-9_\-])+)*@((\[(((([0-1])?([0-9])?[0-9])|(2[0-4][0-9])|(2[0-5][0-5])))\.(((([0-1])?([0-9])?[0-9])|(2[0-4][0-9])|(2[0-5][0-5])))\.(((([0-1])?([0-9])?[0-9])|(2[0-4][0-9])|(2[0-5][0-5])))\.(((([0-1])?([0-9])?[0-9])|(2[0-4][0-9])|(2[0-5][0-5]))\]))|((([a-zA-Z0-9])+(([\-])+([a-zA-Z0-9])+)*\.)+([a-zA-Z])+(([\-])+([a-zA-Z0-9])+)*))\b"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation" 
+				confidence="0.8" />
+				
+			<rule ruleId="meds-email"
+				regEx="\b(\S+@\S+\.\S+)\b"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation" 
+				confidence="0.8" />
+				
+		</rules>
+		<createAnnotations>
+			<annotation id="emailAnnot"
+				type="phi.types.ElectronicAddress">
+				<begin group="0" />
+				<end group="0" />
+				<setFeature name="confidence" type="Confidence" />
+				<setFeature name="regex" type="RuleId" />
+			</annotation>
+		</createAnnotations>
+	</concept>
+	
+	<!-- CONCEPT FOR PHI TYPE ELECTRONICADDRESS (Detection of URLs) -->
+	<concept name="URLDetection" processAllRules="true">
+		<rules>
+			
+			<rule ruleId="mit-from-all-url-regex"
+				regEx="\b([hH][Tt][Tt][Pp][Ss]?\:\/\/|[Ff][Tt][Pp]\:\/\/|[Ww][Ww][Ww]\.|[Ww][Ee][Bb]\.)[^\s]+"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation" 
+				confidence="1.0" />
+			
+			<!-- original mit rules for urls -->
+			<rule ruleId="mit-url-1"
+				regEx="\bhttps?\:\/\/[\w\.]+\w{2,4}\/\S+\b"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation" 
+				confidence="1.0" />
+			<rule ruleId="mit-url-2"
+				regEx="\bftp\:\/\/[\w\.]+\w{2,4}\/\S+\b"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation" 
+				confidence="1.0" />
+			<rule ruleId="mit-url-3"
+				regEx="\bwww\.[\w\.]+\w{2,4}\/\S+\b"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation" 
+				confidence="1.0" />
+			<rule ruleId="mit-url-4"
+				regEx="\bwww\.[\w\.]+\w{2,4}\b"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation" 
+				confidence="1.0" />
+			<rule ruleId="mit-url-5"
+				regEx="\bweb\.[\w\.]+\w{2,4}\/\S+\b"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation" 
+				confidence="1.0" />
+			<rule ruleId="mit-url-6"
+				regEx="\bweb\.[\w\.]+\w{2,4}\b"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation" 
+				confidence="1.0" />
+			<rule ruleId="mit-url-7"
+				regEx="\bhttps?\:\/\/[\w\.]+\w{2,4}\b"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation" 
+				confidence="1.0" />
+			<rule ruleId="mit-url-8"
+				regEx="\bftp\:\/\/[\w\.]+\w{2,4}\b"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation" 
+				confidence="1.0" />
+				
+			<!-- dot comS or govS, no www or other -->
+			<rule ruleId="va-9"
+				regEx="\b([A-Za-z]+\.(com|gov))\b"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation" 
+				confidence="1.0" />
+			
+		</rules>
+		<createAnnotations>
+			<annotation id="URLAnnot"
+				type="phi.types.ElectronicAddress">
+				<begin group="0" />
+				<end group="0" />
+				<setFeature name="confidence" type="Confidence" />
+				<setFeature name="regex" type="RuleId" />
+			</annotation>
+		</createAnnotations>
+	</concept>
+
+	<!-- CONCEPT FOR PHI TYPE ELECTRONICADDRESS (Detection of IP addresses) -->
+	<concept name="IPDetection" processAllRules="true">
+		<rules>
+
+			<rule ruleId="hms-IP"
+				regEx="\b(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9])\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9]|0)\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9]|0)\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[0-9])\b"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation" 
+				confidence="1.0" />
+		</rules>
+		<createAnnotations>
+			<annotation id="IPAnnot"
+				type="phi.types.ElectronicAddress">
+				<begin group="0" />
+				<end group="0" />
+				<setFeature name="confidence" type="Confidence" />
+				<setFeature name="regex" type="RuleId" />
+			</annotation>
+		</createAnnotations>
+	</concept>
+	
+	<!-- CONCEPT FOR PHI TYPE DATE -->
+	<concept name="dateDetection" processAllRules="true">
+		<rules>
+
+			<!-- 'mm-/.dd-/.yy', 'mm-/.dd-/.yyyy', 'mm-/.dd-/.yy??@hh:mm', 'mm-/.dd-/.yy??@hhmm',
+			'mm-/.dd-/.yy?? hh:mm', 'mm-/.dd-/.yy??@hh:mm:ss', 'mm-/.dd-/.yy?? hhmmss[pm]' -->
+			<rule ruleId="va-date-1"
+				regEx="\b((0?[1-9]|1[012])[\-\/\.](0?[1-9]|[12]\d|3[01])[\-\/\.](19\d{2}|20\d{2}|\d{2})(\v{sepDatesOPT}[ @]([Aa][Tt])?\v{sepDatesOPT}[012]?\d[\:\.]?([0-5]\d)?([\:\.]?[0-5]\d)?(\v{sepDatesOPT}[Pp]\.?[Mm]\.?|[Aa]\.?[Mm]\.?)?)?)(?=($|\W))"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation"
+				confidence="1.0" />
+			
+			<!-- 'FEB dd yyyy', 'Jan. ddth, 'yy', 'march, dst, yy',
+			'FEB dd yyyy@hh:mm:ss', 'Jan. ddth, 'yy hhmmss', 'march, dst, yy@hhmm[pm]' -->
+			<rule ruleId="va-date-2"
+				regEx="\b((\v{months})\.?\,?\v{separator}[0123]?\d(st|nd|rd|th)?\,?\v{sepDatesOPT}(19\d{2}|20\d{2}|\'?\d{2})(\v{sepDatesOPT}[ @](at)?\v{sepDatesOPT}[012]?\d[\:\.]?([0-5]\d)?([\:\.]?[0-5]\d)?(\v{sepDatesOPT}[Pp]\.?[Mm]\.?|[Aa]\.?[Mm]\.?)?)?)(?=($|\W))"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation"
+				confidence="1.0" />
+			
+			<!-- 'Dec. 25', 'DEC., 1st', 'Jan. 01', 'Jan, 30' 
+			mods v05 -->
+			<rule ruleId="va-date-3"
+				regEx="\b((\v{months})\.?\,?\v{sepDatesOPT}[0123]?\d([sS][Tt]|[Nn][Dd]|[Rr][Dd]|[Tt][Hh])?(\v{sepDatesOPT}[ @]([Aa][Tt])?\v{sepDatesOPT}[012]?\d[\:\.]?([0-5]\d)?([\:\.]?[0-5]\d)?(\v{sepDatesOPT}[Pp]\.?[Mm]\.?|[Aa]\.?[Mm]\.?)?)?)(?=($|\W))"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation"
+				confidence="1.0" />
+			
+			<!-- 'May., 1990', 'May '78' -->
+			<rule ruleId="va-date-4"
+				regEx="\b((\v{months})\.?\,?\v{sepOPT}(19\d{2}|20\d{2}|\'\d{2}))\b"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation"
+				confidence="1.0" />
+				
+			<!-- 'May of 1990', 'May of '78' -->
+			<rule ruleId="va-date-4-2"
+				regEx="\b((\v{months})\v{separator}of\v{separator}(19\d{2}|20\d{2}|\'\d{2}))\b"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation"
+				confidence="1.0" />
+			
+			<!-- 'dd-/.month-/.yy', 'dd-/.month-/.yyyy', 'dd-/.month-/.yy??@hh:mm', 'dd-/.month-/.yy??@hhmm' -->
+			<rule ruleId="va-date-13"
+				regEx="\b((0?[1-9]|[12]\d|3[01])[\-\/\.](\v{months})[\-\/\.](19\d{2}|20\d{2}|\d{2})(\v{sepDatesOPT}[ @]([Aa][Tt])?\v{sepDatesOPT}[012]?\d[\:\.]?([0-5]\d)?([\:\.]?[0-5]\d)?(\v{sepDatesOPT}[Pp]\.?[Mm]\.?|[Aa]\.?[Mm]\.?)?)?)(?=($|\W))"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation"
+				confidence="1.0" />
+				
+			<!-- '12jan2003', '09jan', 'jan2003', 'jan03' -->
+			<rule ruleId="va-date-14"
+				regEx="\b(\d{2}\v{sepDatesOPT}(\v{months})(\d{2}(\d{2})?)?|(\d{2})?(\v{months})\d{2}(\d{2})?)\b"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation"
+				confidence="1.0" />
+				
+			<!-- seasons -->
+			<rule ruleId="va-date-15"
+				regEx="\b((\v{seasons})(\v{separator}of\v{separator}(19\d{2}|20\d{2}|\d{2}))?)(?=($|\W))"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation"
+				confidence="1.0" />
+				
+			<!-- fiscal year -->
+			<rule ruleId="va-date-19"
+				regEx="\b(FY(19\d{2}|20\d{2}|[901]\d))\b"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation"
+				confidence="1.0" />
+				
+			<!-- 80s '80s 80's '81 -->
+			<rule ruleId="va-date-20"
+				regEx="((?&lt;=(^|\W))(\'?[2-9]0\'?s|\'\d{2}))\b"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation"
+				confidence="1.0" />
+				
+			<!-- v05 'mm-/.dd-/.yy', 'mm-/.dd-/.yyyy' -->
+			<rule ruleId="va-date-22"
+				regEx="\b((0?[1-9]|1[012])[\-\/\.](0?[1-9]|[12]\d|3[01])[\-\/\.](19\d{2}|20\d{2}|\d{2}))\b"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation"
+				confidence="1.0" />
+				
+			<!-- v05 o'clock -->
+			<rule ruleId="va-date-23"
+				regEx="\b(\d{1,2}\v{separator}o\'?clock)\b"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation"
+				confidence="1.0" />
+				
+			<!-- v05 holidays -->
+			<rule ruleId="va-date-24"
+				regEx="\b(\v{holidays})\b"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation"
+				confidence="1.0" />
+			
+			<!-- pm am time (less confidence) '0202am', '4:45p.m.', '8PM'-->
+			<rule ruleId="va-date-6"
+				regEx="\b((?&lt;!\d{2}[ @])([012]?\d[\:\.]?\d{2}|1[0-2]|0?[1-9])\v{sepOPT}([Pp]\.?[Mm]\.?|[Aa]\.?[Mm]\.?))(?=($|\W))"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation"
+				confidence="0.9" />
+			
+			<!-- 'May' all contexts v05 -->
+			<rule ruleId="va-date-5"
+				regEx="\b((\v{months}))\b"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation"
+				confidence="0.86" />
+			
+			<!-- 'around 21:00' (no pm or am) --> 
+			<rule ruleId="va-date-7"
+				regEx="\b((?&lt;=(by\v{separator}|around\v{separator}|at\v{separator}))[012]?\d[\:\.]?\d{2}(?!\v{sepOPT}([Pp]\.?[Mm]\.?|[Aa]\.?[Mm]\.?)))(?=($|\W))"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation"
+				confidence="0.86" />
+			
+			<!-- 4/2digits years with context 'in' -->
+			<rule ruleId="va-date-8"
+				regEx="\b((?&lt;=(in\v{separator}|year\v{separator}|since\v{separator}))(19\d{2}|20\d{2}|\d{2}))\b"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation"
+				confidence="0.86" />
+			
+			<!-- '1990s', '1990's', ''78' not in the other context -->
+			<rule ruleId="va-date-9"
+				regEx="\b((19\d{2}\'?s|20\d{2}\'?s|\'\d{2}))\b"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation"
+				confidence="0.86" />
+				
+			<!-- v05   pm am time (intervals) '8-4:45p.m.', '7-8PM'-->
+			<rule ruleId="va-date-21"
+				regEx="\b(([012]?\d[\:\.]?\d{2}|1[0-2]|0?[1-9])\-([012]?\d[\:\.]?\d{2}|1[0-2]|0?[1-9])\v{sepOPT}([Pp]\.?[Mm]\.?|[Aa]\.?[Mm]\.?))(?=($|\W))"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation"
+				confidence="0.86" />
+				
+			<!-- only days 'TU', 'Tues', 'Tuesday' 
+			<rule ruleId="va-date-10"
+				regEx="\b(\v{days})\b"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation"
+				confidence="0.7" />-->
+				
+			<!-- days 'TU', 'Tues', 'Tuesday' -->
+			<rule ruleId="va-date-10"
+				regEx="\b((\v{days})(\-(\v{days}))*(\v{sepDatesOPT}[ @]([Aa][Tt])?\v{sepDatesOPT}[012]?\d[\:\.]?([0-5]\d)?([\:\.]?[0-5]\d)?(\v{sepDatesOPT}[Pp]\.?[Mm]\.?|[Aa]\.?[Mm]\.?)?)?)(?=($|\W))"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation"
+				confidence="0.8" />
+			
+			<!-- days intervals abbreviations 'MWF' 
+			<rule ruleId="va-date-11"
+				regEx="\b([MTWFS]+)\b"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation"
+				confidence="0.5" />
+				-->
+			<!-- days intervals abbreviations 'MWF' and intervals opt. time -->
+			<rule ruleId="va-date-11-2"
+				regEx="\b([MTWFS]+(\-[MTWFS]+){1,2}(\v{sepDatesOPT}([012]?\d[\:\.]?([0-5]\d)|1[0-2]|0?[1-9])\v{sepDatesOPT}([Pp]\.?[Mm]\.?|[Aa]\.?[Mm]\.?)?)?)(?=($|\W))"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation"
+				confidence="0.5" />
+			
+			<!-- dates?? 'mm/yyyy', 'mm-yy' -->
+			<rule ruleId="va-date-12"
+				regEx="\b((0?[1-9]|1[012])[\-\/](19\d{2}|20\d{2}|\d{2}))\b"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation"
+				confidence="0.5" />
+				
+			<!-- hours-->
+			<rule ruleId="va-date-17"
+				regEx="\b(([012]?\d\:[0-5]\d))\b"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation"
+				confidence="0.5" />
+				
+			<!-- years 4-digit tokens -->
+			<rule ruleId="va-date-16"
+				regEx="\b((19\d{2}|20[01]\d))\b"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation"
+				confidence="0.4" />
+				
+			<!-- hours less less conf -->
+			<rule ruleId="va-date-18"
+				regEx="\b((0\d|1\d|2[0123])[0-5]\d)\b"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation"
+				confidence="0.4" />
+				
+			<!-- days intervals abbreviations in LOWERCASE 'mwf' -->
+			<rule ruleId="va-date-abbr-lw"
+				regEx="\b([mtwfs]+(\-[mtwfs]+)?)\b"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation"
+				confidence="0.5" />
+			
+			<!-- days intervals abbreviations in LOWERCASE 'tu su sa wed' -->
+			<rule ruleId="va-date-abbr-lw2"
+				regEx="\b((mo|tu|wed?|th|fr|sat?|su)(\-(mo|tu|wed?|th|fr|sat?|su))?)\b"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation"
+				confidence="0.5" />
+				
+		</rules>
+		<createAnnotations>
+			<annotation id="dateAnnot"
+				type="phi.types.Date">
+				<begin group="0" />
+				<end group="0" />
+				<setFeature name="confidence" type="Confidence" />
+				<setFeature name="regex" type="RuleId" />
+			</annotation>
+		</createAnnotations>
+		
+	</concept>
+	
+	
+
+	<!-- CONCEPT FOR PHI TYPE PHONE NUMBERS --> 
+	<concept name="phoneDetection" processAllRules="true">
+		<rules>
+		
+			<!-- previous regex for phones
+			'+(1) (800)-234-5678' optional 'x0909|ext(ension). 0909'
+			<rule ruleId="va-phone-1" regEx="(?&lt;=(\s|^))(((\+?\(?\s*\d{1,2}\)?\-?\s*)?(\(?\d{3}[\)?|\-?|\s]+)?\d{3}[\-?|\s]+\d{4})(\s*x\.?\s*[\(]?[\d]+[\)]?|\s*ext[\.]?\s*[\(]?[\d]+[\)]?|\s*extension\s*\(?[\d]+\)?)?)(?=(\s|$))"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation"
+				confidence="1.0" /> -->
+			
+			<!-- previous v04.1 -->
+			<!-- '+(1) (800)-234-5678' optional 'x0909|ext(ension). 0909'
+			<rule ruleId="va-phone-1" regEx="(?&lt;=(\s|^|[^0-9]))((((\+\s*)?(\(\s*)?\d{1,2}\)?\-?\s*)?(\(?\d{3}\)?\-?\s*)?\d{3}(\-?|\s)+\d{4})(\s*,?\s*x\.?\s*[\(]?[\d]+[\)]?|\s*,?\s*ext[\.]?\s*[\(]?[\d]+[\)]?|\s*,?\s*extension\s*\(?[\d]+\)?)?)(?=(\b|$))"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation"
+				confidence="1.0" />-->
+				
+			<!-- v05 -->
+			<!-- '+(1) (80?0?)-/234-/5678' optional 'x0909|ext(ension). 0909'-->
+			<rule ruleId="va-phone-1" regEx="(?&lt;=(\s|^|[^0-9]))((((\+\s*)?(\(\s*)?\d{1,2}\)?\-?\s*)?(\(?\d{1,3}\)?\/?\-?\s*)?\d{3}(\/?\-?|\s)+\d{4})(\s*\(\d+\)|\s*[:;,]?\s*[Xx]\.?\s*[\(]?[\d]+[\)]?|\s*[:;,]?\s*[Ee][Xx][Tt][\.]?\s*[\(]?[\d]+[\)]?|\s*[:;,]?\s*([Ee]xtension|EXTENSION)\s*\(?[\d]+\)?)?)(?=(\b|$))"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation"
+				confidence="1.0" />
+			
+			<!-- 'call: XXX', 'dial 000-000' w-1 -->
+			<rule ruleId="va-phone-2" regEx="\b((?&lt;=(\v{contextTelephone})[\s\:\#&quot;']+)\d+([\- ]\v{sepOPT}\d+)*)\b"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation"
+				confidence="0.86" />
+				
+			<!-- 'x0909|ext(ension). 0909'
+			<rule ruleId="va-phone-3" regEx="\b((x\.?\s*\d+|ext[\.]?\s*\d+|\s*extension\s*\d+))\b"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation"
+				confidence="0.86" />-->
+				
+			<!-- v08 -->
+			<!-- 'ext(ension). 0909' regex more strict -->
+			<rule ruleId="va-phone-3" regEx="\b(([Ee][Xx][Tt]\.?\s*\d{3,5}|\s*([Ee]xtension|EXTENSION)\s*\d{3,5}))\b"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation"
+				confidence="0.86" />
+				
+			<!-- '+(1) (80?0?)-/(234)?-/AAAA' -->
+			<rule ruleId="va-phone-letters" regEx="(?&lt;=(\s|^|[^0-9]))((\+\s*)?(\(\s*)?\d{1,2}\)?[\- ]\s*)?(\(?\d{3}\)?[\/\-])(\d{3}[\/\-][A-Za-z]{4}|[A-Za-z]{7}|[A-Za-z ]{8})(\s*\(\d+\)\s*[:;,]?\s*[Xx]\.?\s*[\(]?[\d]+[\)]?|\s*[:;,]?\s*[Ee][Xx][Tt][\.]?\s*[\(]?[\d]+[\)]?|\s*[:;,]?\s*([Ee]xtension|EXTENSION)\s*\(?[\d]+\)?)?(?=(\b|$))"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation"
+				confidence="0.86" />
+				
+		</rules>
+		<createAnnotations>
+			<annotation id="phoneAnnot"
+				type="phi.types.PhoneNumber">
+				<begin group="0" />
+				<end group="0" />
+				<setFeature name="confidence" type="Confidence" />
+				<setFeature name="regex" type="RuleId" />
+			</annotation>
+		</createAnnotations>
+	</concept>
+	
+	
+	<!-- CONCEPT FOR PHI TYPE ZIPCODES -->
+	<concept name="zipDetection" processAllRules="true">
+		<rules>
+			<rule ruleId="mit-zip"
+				regEx="\b((?&lt;=\b(\v{US_states_abbreANDcomplete})\v{sepOPT}\.?\,?\v{sepOPT})\d{5}[\-]?[0-9]*)\b"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation"
+				confidence="1.0" />
+		</rules>
+		<createAnnotations>
+			<annotation id="zipAnnot"
+				type="phi.types.Zipcode">
+				<begin group="0" />
+				<end group="0" />
+				<setFeature name="confidence" type="Confidence" />
+				<setFeature name="regex" type="RuleId" />
+			</annotation>
+		</createAnnotations>
+	</concept>
+	
+	
+	<!-- CONCEPT FOR PHI TYPE SSN -->
+	<concept name="ssnDetection" processAllRules="true">
+		<rules>
+			<!-- 9-digits are annotated as SSN :? -->
+			<rule ruleId="mit-ssn"
+				regEx="\b(\d\d\d([- \/]?)\d\d([- \/]?)\d\d\d\d)\b"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation"
+				confidence="0.5" />
+				
+			<rule ruleId="va-ssn-1"
+				regEx="\b(\d\d\d-\d\d-\d\d\d\d)\b"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation"
+				confidence="1.0" />
+				
+			<rule ruleId="va-ssn-2"
+				regEx="\b((?&lt;=([Ss][Ss][Nn]|[Ss][Oo][Cc][Ii][Aa][Ll]( [Ss][Ee][Cc][Uu][Rr][Ii][Tt][Yy])?|[Ss][Oo][Cc]\.?\v{separator}[Ss][Ee][Cc]\.?)\v{sepOPT}\:?\.?\v{sepOPT})\d{3}[\-\/ ]?\d{2}[\-\/ ]?\d{4})\b"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation"
+				confidence="1.0" />
+		</rules>
+		<createAnnotations>
+			<annotation id="ssnAnnot"
+				type="phi.types.SSN">
+				<begin group="0" />
+				<end group="0" />
+				<setFeature name="confidence" type="Confidence" />
+				<setFeature name="regex" type="RuleId" />
+			</annotation>
+		</createAnnotations>
+	</concept>
+
+	
+	<!-- CONCEPT FOR PHI STATE/COUNTRY -->
+	<concept name="stateDetection" processAllRules="true" >
+		<rules>
+			<rule ruleId="stateComplete-va"
+				regEx="\b(\v{US_states_complete})\b"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation"
+				confidence="1.0" />
+			
+			<rule ruleId="INcity-stateabbr-va"
+				regEx="\b((?&lt;=(\Win\s\w{3,15}(\W\w{3,15})?\v{sepOPT}[, ]\v{sepOPT}))(\v{US_states_abbr}))\b"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation"
+				confidence="0.86" />
+			
+			<rule ruleId="InFrom-stateabbr-va"
+				regEx="\b((?&lt;=(\W(in|from)\v{separator}))(\v{US_states_abbr}))\b"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation"
+				confidence="0.86" />
+				
+<!--			<rule ruleId="allmatches-stateabbr-va"
+				regEx="\b((\v{US_states_abbr}))\b"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation"
+				confidence="0.5" /> -->
+				
+			<rule ruleId="CHECKcity-stateabbr-va"
+				regEx="\b(\w+)\v{sepOPT}[, ]\v{sepOPT}(\v{US_states_abbr})\b"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation"
+				confidence="0.86" />
+		</rules>
+		
+		<createAnnotations>
+			<annotation id="stateAnnot"
+				type="phi.types.State" validate="org.apache.uima.annotator.regex.StateValidator">
+				<begin group="0" />
+				<end group="0" />
+				<setFeature name="confidence" type="Confidence" />
+				<setFeature name="regex" type="RuleId" />
+			</annotation>
+		</createAnnotations>
+	</concept>
+	
+	<!-- CONCEPT FOR PHI STATE/COUNTRY -->
+	<concept name="countryDetection" processAllRules="true" >
+		<rules>
+			<rule ruleId="countryComplete-va"
+				regEx="\b(\v{Countries_2w})\b"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation"
+				confidence="1.0" />
+		</rules>
+		<createAnnotations>
+			<annotation id="countryAnnot"
+				type="phi.types.State">
+				<begin group="0" />
+				<end group="0" />
+				<setFeature name="confidence" type="Confidence" />
+				<setFeature name="regex" type="RuleId" />
+			</annotation>
+		</createAnnotations>
+	</concept>
+	
+	
+	<!-- CONCEPT FOR NAME CANDIDATES -->
+	<!-- each rule indicates the potential type of name (see ruleId) -->
+	<concept name="namecandidateDetection" processAllRules="true">
+		<rules>
+			<!-- pre-triggers: 'Assistant: ' -->
+			<rule ruleId="HealthCareProviderName-va-1"
+				regEx="\b((?&lt;=(^|\W)(\v{HCProvider_pretriggers})\s*)(\v{potentialNames}))\b"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation"
+				confidence="1.0" />
+			<!-- post-triggers: ' M.D.' -->
+			<rule ruleId="HealthCareProviderName-va-2"
+				regEx="\b((\v{potentialNames})(?=[\, ]\v{sepOPT}(\v{HCProvider_posttriggers})(\W|$)))\b"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation"
+				confidence="1.0" />
+			<!-- Dr. -->
+			<rule ruleId="HealthCareProviderName-va-3"
+				regEx="\b((?&lt;=(^|\W)[Dd][Rr]\.?\v{separator})(\v{potentialNames}))\b"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation"
+				confidence="1.0" />
+			<!-- Dr. 1-word name (even in lowercase or one initial)-->
+			<rule ruleId="HealthCareProviderName-va-4"
+				regEx="\b((?&lt;=(^|\W)[Dd][Rr]\.?\v{separator})([A-Z][A-Za-z]+|[A-Z]|[a-z]+))\b"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation"
+				confidence="1.0" />
+			
+			<!-- 'Patient[ name]: ' -->	
+			<rule ruleId="PatientName-va-1"
+				regEx="\b((?&lt;=(^|\W)([Pp][Aa][Tt][Ii][Ee][Nn][Tt]\v{sepOPT}([Nn][Aa][Mm][Ee])?\:\v{sepOPT}|[Nn][Aa][Mm][Ee]\:\v{sepOPT}|S\:\v{sepOPT}))(\v{potentialNames}))\b"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation"
+				confidence="1.0" />
+			<!-- Mr. (will be considered as pt) -->
+			<rule ruleId="PatientName-va-2"
+				regEx="\b((?&lt;=(^|\W)(([Mm][Rr]|[Mm][Rr][Ss]|[Mm][Ss])\.?\v{separator}))(\v{potentialNames}))\b"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation"
+				confidence="1.0" />
+			<!-- Mr. 1-word names (even in lowercase or one initial)-->
+			<rule ruleId="PatientName-va-3"
+				regEx="\b((?&lt;=(^|\W)(([Mm][Rr]|[Mm][Rr][Ss]|[Mm][Ss])\.?\v{separator}))([A-Z][A-Za-z]+|[A-Z]|[a-z]+))\b"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation"
+				confidence="1.0" />
+			
+			<!-- otherHCPname low prob X. Xxx -->
+			<rule ruleId="HealthCareProviderName-va-5"
+				regEx="\b([A-Z]\. [A-Z][a-z]+)\b"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation"
+				confidence="0.6" />
+						
+			<!-- low prob. lookups needed -->
+			<!-- relative indicators in previous word -->
+			<rule ruleId="RelativeName-va-1"
+				regEx="\b((?&lt;=(^|\W)(\v{potentialRelativeNameIndicators})\:?\,?\v{separator})(\v{potentialNames}|[A-Z][A-Za-z]+))\b"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation"
+				confidence="0.6" />
+			<!-- low prob. lookups needed -->
+			<!-- relative indicators in next word -->
+			<rule ruleId="RelativeName-va-2"
+				regEx="\b((\v{potentialNames}|[A-Z][A-Za-z]+)(?=\v{separator}(\v{potentialRelativeNameIndicators})(\W|$)))\b"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation"
+				confidence="0.6" />
+				
+			<!-- low prob. lookups needed -->
+			<!-- othername indicators in previous word -->
+			<rule ruleId="OtherPersonName-va-1"
+				regEx="\b((?&lt;=(^|\W)(\v{potentialNameIndicators})\:?\,?\v{separator})(\v{potentialNames}|[A-Z][A-Za-z]+))\b"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation"
+				confidence="0.6" />
+			<!-- low prob. lookups needed -->
+			<!-- othername indicators in next word -->
+			<rule ruleId="OtherPersonName-va-2"
+				regEx="\b((\v{potentialNames}|[A-Z][A-Za-z]+)(?=\v{separator}(\v{potentialNameIndicators})(\W|$)))\b"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation"
+				confidence="0.6" />
+				
+		</rules>
+		<createAnnotations>
+			<annotation id="namecandidateAnnot"
+				type="deid.chir.va.gov.type.NameCandidate">
+				<begin group="0" />
+				<end group="0" />
+				<setFeature name="confidence" type="Confidence" />
+				<setFeature name="regex" type="RuleId" />
+			</annotation>
+		</createAnnotations>
+	</concept>
+	
+	
+	<!-- CONCEPT FOR STREETCITY (ADDRESS) -->
+	<concept name="addressDetection"  processAllRules="true">
+		<rules>
+			<rule ruleId="va-complete-address-1"
+				regEx="\b[0-9]+\s+([nN][wW]|[nN][eE]|[nN]|[sS][wW]|[sS][eE]|[sS]|[eE]|[wW])\s+[A-Z][A-Za-z]+(\s+([A-Z][A-Za-z]+|[0-9]+)){0,5}\s*(,\s*[A-Z][A-Za-z]+(\s+[0-9]+)?)?,\s*(\v{US_states_abbreANDcomplete})\b"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation"
+				confidence="0.9" />
+				
+			<rule ruleId="va-complete-address-2"
+				regEx="\b([0-9]+\s+)?[0-9]+([Tt][Hh]|[Nn][Dd]|[Rr][Dd]|[Ss][Tt])?\s+[A-Z][A-Za-z]+(\s+([A-Z][A-Za-z]+|[0-9]+)){0,5}\s*(,\s*[A-Z][A-Za-z]+(\s+[0-9]+)?)?,\s*(\v{US_states_abbreANDcomplete})\b"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation"
+				confidence="0.9" />
+				
+			<rule ruleId="va-complete-address-3"
+				regEx="\b([0-9]+\s+)?[0-9]+\s*([Tt][Hh]|[Nn][Dd]|[Rr][Dd]|[Ss][Tt])\s+([Aa]venue|[Aa][Vv][Ee])\b"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation"
+				confidence="0.9" />
+			
+			<rule ruleId="hms-address"
+				regEx="\b([0-9]{1,6}(\w+)?\s(\w+\s)+(\v{hms_locs})[^A-Za-z]?(\.)?[\s,]?([A-Z][a-zA-Z]+[^a-z^A-Z^0-9]+){1,5}((\d{5}(-)\d{4})|(\d{5}))?)\b"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation"
+				confidence="0.86" />
+				
+			<rule ruleId="hms-address-small"
+				regEx="\b([0-9]{1,6}(\w+)?\s(\w+\s)+(\v{hms_locs}))\b"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation"
+				confidence="0.86" />
+				
+			<rule ruleId="mit-loc-indicator"
+				regEx="\b((?&lt;=(\v{loc_indicators})[\.\:\,\s]\s?))([A-Z][A-Za-z]+)\b"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation"
+				confidence="0.86" />
+				
+			<rule ruleId="mit-loc-ind-suff"
+				regEx="\b(([A-Z][A-Za-z\-]+)? +)?(([A-Z][A-Za-z\-]+) +(\v{loc_indicators_suff}))\b"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation"
+				confidence="0.86" />
+				
+			<rule ruleId="mit-loc-ind-suff-inside"
+				regEx="\b(([A-Z][A-Za-z]+ +)?[A-Z][A-Za-z]+(town|ville|harbor|tower))\b"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation"
+				confidence="0.86" />
+				
+			<rule ruleId="mit-loc-ind-pre"
+				regEx="\b((((\v{loc_indicators_pre}) *([A-Z][A-Za-z\-]+)) *)([A-Z][A-Za-z\-]+)?)\b"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation"
+				confidence="0.86" />
+			
+		</rules>
+		<createAnnotations>
+			<annotation id="addressAnnot"
+				type="phi.types.StreetCity">
+				<begin group="0" />
+				<end group="0" />
+				<setFeature name="confidence" type="Confidence" />
+				<setFeature name="regex" type="RuleId" />
+			</annotation>
+		</createAnnotations>
+	</concept>
+	
+	<!-- CONCEPT FOR STREETCITY (ADDRESS) -->
+	<concept name="addressDetection2"  processAllRules="true">
+		<rules>
+			<rule ruleId="va-address-1"
+				regEx="\b([A-Z][A-Za-z]+)(\s?[, ]\s?(\v{US_states_complete}|\v{Countries_2w}))\b"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation"
+				confidence="1.0" />
+			
+			<rule ruleId="va-address-2"
+				regEx="(?&lt;=\Win\s)(\w{3,15}(\W\w{3,15})?)(\s?[, ]\s?(\v{US_states_abbr}))\b"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation"
+				confidence="1.0" />
+				
+			<rule ruleId="va-address-checkcountry"
+				regEx="\b([,]\s?[A-Z][A-Za-z]+)\b"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation"
+				confidence="0.7" />
+				
+			<rule ruleId="va-address-checkcity"
+				regEx="\b((North|NORTH|South|SOUTH|West|WEST|Est|EST|So\.?|[Ss][Tt]\.?)\s[A-Z][A-Za-z]+)\b"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation"
+				confidence="0.7" />
+			
+			<!-- v05 parts of addresses -->
+			<rule ruleId="va-address-part1"
+				regEx="\b(\d{2,5}\s{1,2}([sS]|[Nn]|[Ee]|[Ww])\s{1,2}\d{2,5}\s{1,2}([sS]|[Nn]|[Ee]|[Ww]))\b"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation"
+				confidence="0.7" />
+			<!-- v05 parts of addresses -->
+			<rule ruleId="va-address-part2"
+				regEx="\b((\,\s{0,2})?([Pp][Oo]\s[Bb][Oo][Xx]|[Ss][Uu][Ii][Tt][Ee])\s{1,2}\d{1,4}(\s?\,\s{1,2})?)\b"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation"
+				confidence="0.7" />
+			<!-- check city -->
+			<rule ruleId="CHECKcity-stateabbr-va"
+				regEx="\b(\w+)\v{sepOPT}[, ]\v{sepOPT}(\v{US_states_abbr})\b"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation"
+				confidence="0.86" />
+		</rules>
+		<createAnnotations>
+			<annotation id="addressAnnot2"
+				type="phi.types.StreetCity" validate="org.apache.uima.annotator.regex.StreetCityValidator">
+				<begin group="1" />
+				<end group="1" />
+				<setFeature name="confidence" type="Confidence" />
+				<setFeature name="regex" type="RuleId" />
+			</annotation>
+		</createAnnotations>
+	</concept>
+	
+	<!-- CONCEPT FOR AGEGT89 -->
+	<concept name="agegt89Detection" processAllRules="true">
+		<rules>
+			<!-- ninety-X (one)hundred-X (109max) -->
+			<rule ruleId="hms-written-age-1"
+				regEx="\b(([Nn][Ii][Nn][Ee][Tt][Yy]|([Oo][Nn][Ee])?[-\s]?[Hh][Uu][Nn][Dd][Rr][Ee][Dd])[-\s]?([Oo][Nn][Ee]|[Tt][Ww][Oo]|[Tt][Hh][Rr][Ee][Ee]|[Ff][Oo][Uu][Rr]|[Ff][Ii][Vv][Ee]|[sS][Ii][Xx]|[Ss][Ee][Vv][Ee][Nn]|[Ee][Ii][Gg][Hh][Tt]|[Nn][Ii][Nn][Ee])?(?=([-\s]?([yY](ea)?rs?|[Yy][Oo])(\s+([Oo]ld|[Oo]f\s+[Aa]ge))?)))\b"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation"
+				confidence="1.0" />
+				
+			<!-- written 100 - 119 -->
+			<rule ruleId="hms-written-age-2"
+				regEx="\b(([Oo][Nn][Ee])?[-\s]?[Hh][Uu][Nn][Dd][Rr][Ee][Dd][-\s]?([Tt][Ee][Nn]|[Ee][Ll][Ee][Vv][Ee][Nn]|[Tt][Ww][Ee][Ll][Vv][Ee]|[Tt][Hh][Ii][Rr][Tt][Ee][Ee][Nn]|[Ff][Oo][Uu][Rr][Tt][Ee][Ee][Nn]|[Ff][Ii][Ff][Tt][Ee][Ee][Nn]|[sS][Ii][Xx][Tt][Ee][Ee][Nn]|[Ss][Ee][Vv][Ee][Nn][Tt][Ee][Ee][Nn]|[Ee][Ii][Gg][Hh][Tt][Ee][Ee][Nn]|[Nn][Ii][Nn][Ee][Tt][Ee][Ee][Nn])?(?=([-\s]?([yY](ea)?rs?|[Yy][Oo])(\s+([Oo]ld|[Oo]f\s+[Aa]ge))?)))\b"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation"
+				confidence="1.0" />
+				
+			<rule ruleId="hms-age-1"
+				regEx="\b((9[0-9]|10[0-9]|11[0-9]|12[0-9])(?=(\s+([Mm]ale|[Ff]emale|[Ww]oman|[Mm]an|[Yy]/?[Oo]|yrs|[Yy]ears[-\s]?(old)?))))\b"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation"
+				confidence="1.0" />
+				
+			<rule ruleId="hms-age-2"
+				regEx="\b((?&lt;=(([Aa]ged?|AGED?)([^a-z^A-Z^0-9](over)[^a-z^A-Z^0-9])?))(89|9[0-9]|10[0-9]|11[0-9]|12[0-9]))\b"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation"
+				confidence="1.0" />
+				
+			<rule ruleId="mit-age-1"
+				regEx="\b(([Nn]inety|([Oo]ne[\-\s])?[Hh]undred)[\-\s]\s?([Oo][Nn][Ee]|[Tt][Ww][Oo]|[Tt][Hh][Rr][Ee][Ee]|[Ff][Oo][Uu][Rr]|[Ff][Ii][Vv][Ee]|[sS][Ii][Xx]|[Ss][Ee][Vv][Ee][Nn]|[Ee][Ii][Gg][Hh][Tt]|[Nn][Ii][Nn][Ee])?(?=(\s?(\v{age_indicators_suff}))))\b"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation"
+				confidence="1.0" />
+				
+			<rule ruleId="mit-age-2"
+				regEx="\b((9[0-9]|10[0-9]|11[0-9]|12[0-9])(?=(\s?(\v{age_indicators_suff}))))\b"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation"
+				confidence="1.0" />
+
+			<rule ruleId="mit-age-3"
+				regEx="\b((?&lt;=(\v{age_indicators_pre})\s\s?)(9[0-9]|10[0-9]|11[0-9]|12[0-9])(?!( ?([%#@]|[\.\*][0-9]))))\b"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation"
+				confidence="1.0" />
+			
+			<rule ruleId="mit-age-4"
+				regEx="\b((?&lt;=(\v{age_indicators_pre})\s\s?)([Nn]inety|([Oo]ne[\-\s])?[Hh]undred)[\-\s]\s?([Oo][Nn][Ee]|[Tt][Ww][Oo]|[Tt][Hh][Rr][Ee][Ee]|[Ff][Oo][Uu][Rr]|[Ff][Ii][Vv][Ee]|[sS][Ii][Xx]|[Ss][Ee][Vv][Ee][Nn]|[Ee][Ii][Gg][Hh][Tt]|[Nn][Ii][Nn][Ee])?)\b"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation"
+				confidence="1.0" />
+				
+			<rule ruleId="va-age-1"
+				regEx="\b((?&lt;=((\v{potentialRelativeNameIndicators})  ? ? ?[A-Za-z0-9]{1,5}  ?))([Nn]inety|([Oo]ne[\-\s])?[Hh]undred)[\-\s]\s?([Oo][Nn][Ee]|[Tt][Ww][Oo]|[Tt][Hh][Rr][Ee][Ee]|[Ff][Oo][Uu][Rr]|[Ff][Ii][Vv][Ee]|[sS][Ii][Xx]|[Ss][Ee][Vv][Ee][Nn]|[Ee][Ii][Gg][Hh][Tt]|[Nn][Ii][Nn][Ee])?)\b"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation"
+				confidence="1.0" />
+				
+			<rule ruleId="va-age-2"
+				regEx="\b((?&lt;=((\v{potentialRelativeNameIndicators})  ? ? ?[A-Za-z0-9]{1,5}  ?))(9[0-9]|10[0-9]|11[0-9]|12[0-9])(?!( ?([%#@]|[\.\*][0-9]))))\b"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation"
+				confidence="1.0" />
+				
+			<rule ruleId="va-age-3"
+				regEx="\b((?&lt;=((\v{potentialRelativeNameIndicators})  ? ? ?))([Nn]inety|([Oo]ne[\-\s])?[Hh]undred)[\-\s]\s?([Oo][Nn][Ee]|[Tt][Ww][Oo]|[Tt][Hh][Rr][Ee][Ee]|[Ff][Oo][Uu][Rr]|[Ff][Ii][Vv][Ee]|[sS][Ii][Xx]|[Ss][Ee][Vv][Ee][Nn]|[Ee][Ii][Gg][Hh][Tt]|[Nn][Ii][Nn][Ee])?)\b"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation"
+				confidence="1.0" />
+				
+			<rule ruleId="va-age-4"
+				regEx="\b((?&lt;=((\v{potentialRelativeNameIndicators})  ? ? ?))(9[0-9]|10[0-9]|11[0-9]|12[0-9])(?!( ?([%#@]|[\.\*][0-9]))))\b"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation"
+				confidence="1.0" />
+				
+		</rules>
+		<createAnnotations>
+			<annotation id="agegt89Annot"
+				type="phi.types.Agegt89">
+				<begin group="0" />
+				<end group="0" />
+				<setFeature name="confidence" type="Confidence" />
+				<setFeature name="regex" type="RuleId" />
+			</annotation>
+		</createAnnotations>
+	</concept>
+	
+	<!-- CONCEPT FOR OTHERIDNUMBER -->
+	<concept name="otherIDDetection" processAllRules="true">
+		<rules>
+			<rule ruleId="serial"
+				regEx="\b((?&lt;=(serial (#|n\.|No\.?|number)?\v{sepOPT}))([0-9A-Za-z]+[\-\.]?)+)\b"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation"
+				confidence="0.86" />
+				
+			<rule ruleId="serial-chars"
+				regEx="\b(([\dA-Za-z]+[\-\.])*([0-9]+[A-Za-z]+|[A-Za-z]+[0-9]+)([0-9]+)?[\-\.]([\dA-Za-z]+[\-\.]?)*)\b"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation"
+				confidence="0.86" />
+				
+			<rule ruleId="numbers-poundkey"
+				regEx="\b((?&lt;=(#))\d+)\b"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation"
+				confidence="0.86" />
+				
+			<rule ruleId="pre-triggers"
+				regEx="\b((?&lt;=([Cc][Aa][Ss][Ee]\v{separator}|[Ff][Oo][Rr][Mm]\v{separator}))#?\d+([\/\.\-]\d+)?)\b"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation"
+				confidence="0.86" />
+				
+			<rule ruleId="pre-triggers-chars"
+				regEx="\b((?&lt;=([Aa][Cc][Cc][Ee][Ss][Ii][Oo][Nn]\v{separator}[Nn][Oo]\.?\v{sepOPT}\:?\v{separator}))#?([A-Z]+)?\v{sepOPT}(\d+([\/\.\-]\d+\s)+))\b"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation"
+				confidence="0.86" />
+			
+			<rule ruleId="char-before"
+				regEx="\b([A-Za-z]+[\-\.\/]?\d{3,}([\-\.\/]\d+)?)\b"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation"
+				confidence="0.7" />
+				
+			
+			<rule ruleId="char-after"
+				regEx="\b((\d{5,}([\-\.\/]\d+)?[\-\.\/]?)[A-Za-z]+|(\d{2,}([\-\.\/]\d+)?[\-\.\/]?)(?!([Mm][Gg]|[Mm][Ll]|[Mm][Cc][Gg]|th|[Mm][Mm]|[Mm][Ii][Nn]|[Gg]|[Gg][Mm]|[Hh][Rr]|[Yy][Oo]|[Yy][Ee][Aa][Rr][Ss]?|[Uu][Nn]|[Uu][Nn][Ii]?[Tt]|[Xx]?[Dd][Aa][Ii][Ll][Y]|[Ii][Nn]|y|yrs|s|[Pp][Mm]|[Tt][Hh]|[Aa][Mm]|[Rr][Dd]|[Nn][Dd]))[A-Za-z]+)\b"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation"
+				confidence="0.7" />
+				
+			<rule ruleId="upperC-numbers-numbers"
+				regEx="\b([A-Z]+\s[0-9]+\s[0-9]+)\b"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation"
+				confidence="0.7" />
+				
+			<rule ruleId="numbers-colon-numbers-numbers"
+				regEx="\b(\d+\:\s?\d+[ \-]\d+)\b"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation"
+				confidence="0.7" />
+				
+			<rule ruleId="attached-to-date"
+				regEx="\b(\d+[\/\-]\d+[\/\-]\d+[\/\-]\d+([\/\-]\d+)?(\v{sepOPT}[ @](at)?\v{sepOPT}[012]?\d[\:\.]?([0-5]\d)?([\:\.]?[0-5]\d)?(\v{sepOPT}[Pp]\.?[Mm]\.?|[Aa]\.?[Mm]\.?)?)?)\b"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation"
+				confidence="0.7" />
+				
+				<!-- v05 -->
+			<rule ruleId="in-brackets-2-or-more"
+				regEx="\b((?&lt;=(\[))\d{2,}(?=(\])))\b"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation"
+				confidence="0.7" />
+				
+			<rule ruleId="5-digits-or-more"
+				regEx="\b((([A-Za-z]+)?#?)?\d{5,}([\/\.\-]\d+)?)\b"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation"
+				confidence="0.7" />
+				
+			<rule ruleId="pound-number4"
+				regEx="(?&lt;=(\s|^|[^A-Z]))(([A-Z]+)? ?# ?\d{4,}(-\d+)?)\b"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation"
+				confidence="0.7" />
+			
+		</rules>
+		<createAnnotations>
+			<annotation id=""
+				type="phi.types.OtherIDNumber">
+				<begin group="0" />
+				<end group="0" />
+				<setFeature name="confidence" type="Confidence" />
+				<setFeature name="regex" type="RuleId" />
+			</annotation>
+		</createAnnotations>
+	</concept>
+	
+	<!-- CONCEPT FOR HEALTHCAREUNITNAME -->
+	<concept name="hcunDetection" processAllRules="true">
+		<rules>
+			<!-- previous words with initial capital -->
+			<rule ruleId="hcun-post-triggers"
+				regEx="\b((([A-Z][A-Z-a-z\']+|[Ss][Tt]\.|[A-Z]\.([A-Z]\.)?)\s+){0,3}([A-Z][A-Z-a-z\']+|[Ss][Tt]\.|[A-Z]\.([A-Z]\.)?)\s+(\v{HCUN_post_triggers}))\b"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation"
+				confidence="0.9" />
+				
+			<rule ruleId="hcun-post-VA-triggersS"
+				regEx="\b((([A-Z][A-Z-a-z\']+\s+){0,1}[A-Z][A-Z-a-z\']+|[Nn][Oo][Nn])\s+([Vv][Aa]))\b"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation"
+				confidence="0.9" />
+			
+			<rule ruleId="hcun-pre-triggers"
+				regEx="\b((?&lt;=(referred\v{separator}(to|by)|transferr?ed\v{separator}(to|from)|[Ff][Aa][Cc][Ii][Ll][Ii][Tt][Yy])\v{sepOPT}\:?\v{sepOPT})([A-Z][a-z]+\v{separator}){0,3}[A-Z][a-z]+)\b"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation"
+				confidence="0.9" />
+				
+			<rule ruleId="hcun-pre-triggers-in"
+				regEx="\b((Center\v{separator}for|CENTER\v{separator}FOR|Centre|CENTRE|University\v{separator}Hospital\v{separator}of|HOSPITAL|Hospital)\v{separator}([A-Z][A-Z-a-z]+\v{separator}){0,3}[A-Z][A-Za-z]+)\b"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation"
+				confidence="0.9" />
+			
+			<rule ruleId="hcun-numtriggers"
+				regEx="\b(([Uu][Nn][Ii][Tt]|[Rr][Oo][Oo][Mm])\s*#?[0-9]+)\b"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation"
+				confidence="0.9" />
+				
+			<rule ruleId="hcun-staff"
+				regEx="\b(\d([Nn]([Oo][Rr][Tt][Hh])?|[Ss]([Oo][Uu][Tt][Hh])?)(?=([A-Za-z]+\s+)?staff))\b"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation"
+				confidence="0.9" />
+		</rules>
+		<createAnnotations>
+			<annotation id="hcunAnnot"
+				type="phi.types.HealthCareUnitName">
+				<begin group="0" />
+				<end group="0" />
+				<setFeature name="confidence" type="Confidence" />
+				<setFeature name="regex" type="RuleId" />
+			</annotation>
+		</createAnnotations>
+	</concept>
+	
+	<!-- CONCEPT FOR DEPLOYMENT -->
+	<concept name="deploymentDetection" processAllRules="true">
+		<rules>
+			<rule ruleId="deployment-sure"
+				regEx="\b((\v{sure_deployment_from_training}))(?=(\s|$|[^0-9A-Za-z]))"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation"
+				confidence="1.0" />
+			
+			<rule ruleId="deployment-post-triggers"
+				regEx="\b(([A-Z][A-Z-a-z]+\v{separator})?[A-Z][A-Za-z]+\v{separator}(\v{deployment_post_triggers}))\b"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation"
+				confidence="0.86" />
+			
+			<rule ruleId="deployment-pre-triggers"
+				regEx="\b((\v{deployment_pre_triggers})\v{separator}([A-Z][A-Z-a-z]+\v{separator})?[A-Z][A-Za-z]+)\b"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation"
+				confidence="0.86" />
+		</rules>
+		<createAnnotations>
+			<annotation id="deploymentAnnot"
+				type="phi.types.Deployment">
+				<begin group="0" />
+				<end group="0" />
+				<setFeature name="confidence" type="Confidence" />
+				<setFeature name="regex" type="RuleId" />
+			</annotation>
+		</createAnnotations>
+	</concept>
+	
+	<!-- CONCEPT FOR OTHERORGNAME -->
+	<concept name="otherorgnameDetection" processAllRules="true">
+		<rules>
+			<rule ruleId="otherorg-universities-100"
+				regEx="\b((University\v{separator}of\v{separator}([A-Z]+|([A-Z][A-Z-a-z]+\v{sepDates})*[A-Z][A-Za-z]+)|([A-Z]+|([A-Z][A-Z-a-z]+\v{sepDates})*[A-Z][A-Za-z]+) University(?!(\v{separator}of\v{separator}))))\b"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation"
+				confidence="1.0" />
+				
+			<rule ruleId="otherorg-post-triggers"
+				regEx="\b(([A-Z][A-Za-z]+\v{separator}){0,4}[A-Z][A-Za-z\/]+\v{separator}(\v{otherorg_post_triggers}))\b"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation"
+				confidence="0.9" />
+				
+			<rule ruleId="otherorg-pre-triggers-in"
+				regEx="\b((\v{otherorg_pre_triggers_in})\v{separator}([A-Z][A-Za-z\']+|of)(\v{separator}([A-Z][A-Za-z\']+|of)){0,4})\b"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation"
+				confidence="0.9" />
+				
+			<rule ruleId="otherorg-pre-triggers-out"
+				regEx="\b((?&lt;=(\v{otherorg_pre_triggers_out})\v{sepOPT})[A-Z][A-Za-z\'\-]+(\v{separator}[A-Z][A-Za-z\'\-]+){0,4})\b"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation"
+				confidence="0.9" />
+				
+			<rule ruleId="otherorg-middle"
+				regEx="\b([A-Z][A-Za-z\']*(\v{separator}([A-Z][A-Za-z\']+|of)){0,2}\v{separator}(\v{otherorg_middle})\s+([A-Z][A-Za-z\']+|of)(\v{separator}([A-Z][A-Za-z\']+|of)){0,2})\b"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation"
+				confidence="0.9" />
+			
+			<!-- Based on training 'Social Security' is considered as
+			other organization, when it does not refer to SSN -->
+			<rule ruleId="otherorg-socialsecurity-100"
+				regEx="\b([Ss]ocial\s+[Ss]ecurity\s+[Dd]isability|[Ss]ocial\s+[Ss]ecurity(?!(\s\s?\s?[Nn]umber)))\b"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation"
+				confidence="0.9" />
+			
+			<rule ruleId="otherorg-religious"
+				regEx="\b(\v{otherorg_religious})\b"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation"
+				confidence="0.86" />
+			
+		</rules>
+		<createAnnotations>
+			<annotation id="otherorgnameAnnot"
+				type="phi.types.OtherOrgName">
+				<begin group="0" />
+				<end group="0" />
+				<setFeature name="confidence" type="Confidence" />
+				<setFeature name="regex" type="RuleId" />
+			</annotation>
+		</createAnnotations>
+	</concept>
+	
+	<!-- CONCEPT FOR OTHERORGNAME -->
+	<concept name="otherorgnameDetection2" processAllRules="true">
+		<rules>
+			<rule ruleId="otherorg-working-pattern-1"
+				regEx="\b(agent\v{separator}(for|at|in)\v{separator})([A-Z][A-Za-z]+(\s{1,2}[A-Z][A-Za-z]+){0,2}|[A-Za-z]+(\s{1,2}[A-Za-z]+)?\s{1,2}(\v{otherorg_post_triggers}))\b"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation"
+				confidence="0.80" />
+			
+		</rules>
+		<createAnnotations>
+			<annotation id="otherorgnameAnnot"
+				type="phi.types.OtherOrgName">
+				<begin group="3" />
+				<end group="3" />
+				<setFeature name="confidence" type="Confidence" />
+				<setFeature name="regex" type="RuleId" />
+			</annotation>
+		</createAnnotations>
+	</concept>
+	
+	<!-- CONCEPT FOR OTHERORGNAME -->
+	<concept name="otherorgnameDetection3" processAllRules="true">
+		<rules>
+			<rule ruleId="otherorg-working-pattern-2"
+				regEx="\b(salesman\v{separator}(of)?([A-Za-z0-9\-]+\v{separator}){0,4})(for|at|in)\v{separator}([A-Z][A-Za-z]+(\s{1,2}[A-Z][A-Za-z]+){0,2}|[A-Za-z]+(\s{1,2}[A-Za-z]+)?\s{1,2}(\v{otherorg_post_triggers}))\b"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation"
+				confidence="0.80" />
+				
+			<rule ruleId="otherorg-working-pattern-3"
+				regEx="\b((employed|working)\v{separator}as\v{separator}([A-Za-z0-9\-]+\v{separator}){1,4}(for|at|in)\v{separator})([A-Z][A-Za-z]+(\s{1,2}[A-Z][A-Za-z]+){0,2}|[A-Za-z]+(\s{1,2}[A-Za-z]+)?\s{1,2}(\v{otherorg_post_triggers}))\b"
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation"
+				confidence="0.80" />
+			
+		</rules>
+		<createAnnotations>
+			<annotation id="otherorgnameAnnot"
+				type="phi.types.OtherOrgName">
+				<begin group="5" />
+				<end group="5" />
+				<setFeature name="confidence" type="Confidence" />
+				<setFeature name="regex" type="RuleId" />
+			</annotation>
+		</createAnnotations>
+	</concept>
+	
+	
+	
+	<!-- empty 
+	<concept name="" processAllRules="true">
+		<rules>
+			<rule ruleId=""
+				regEx=""
+				matchStrategy="matchAll" matchType="uima.tcas.DocumentAnnotation"
+				confidence="1.0" />
+		</rules>
+		<createAnnotations>
+			<annotation id=""
+				type="phi.types.">
+				<begin group="0" />
+				<end group="0" />
+				<setFeature name="confidence" type="Confidence" />
+				<setFeature name="regex" type="RuleId" />
+			</annotation>
+		</createAnnotations>
+	</concept>-->
+</conceptSet>

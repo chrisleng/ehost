@@ -1,0 +1,14 @@
+//CUI	AnnounceName
+//this is a 2-column file, divided by comma
+C0000737, abdominal pain
+C0008031, pleuritic chest pain
+C0010200, cough
+C0011991, diarrhea
+C0015967, fever
+C0018681, headache
+C0018682, headache
+C0028081, night sweats
+C0042963, vomiting
+C0085593, chills
+C0231528, myalgia
+C0242429, sore throatdafdf

@@ -1,0 +1,272 @@
+adequate to rule the patient out for,101
+adequate to rule the patient out against,101
+sufficient to rule the patient out for,101
+sufficient to rule the patient out against,101
+did rule the patient out for,101
+did rule the patient out against,101
+can rule the patinet out for,101
+can rule the patinet out against,101
+adequate to rule the patient out,101
+adequate to rule him out for,101
+adequate to rule her out for,101
+sufficient to rule the patient out,101
+sufficient to rule him out for,101
+sufficient to rule her out for,101
+sufficient to rule him out against,101
+sufficient to rule her out against,101
+ought to be ruled out for,102
+is to be ruled out for,102
+what must be ruled out is,102
+as the secondary cause of,105
+as the secondary source of,105
+as the secondary reason of,105
+as the secondary etiology of,105
+as the secondary origin of,105
+as the secondary cause for,105
+as the secondary source for,105
+as the secondary reason for,105
+as the secondary etiology for,105
+as the secondary origin for,105
+as a secondary cause of,105
+as a secondary source of,105
+as a secondary reason of,105
+as a secondary etiology of,105
+as a secondary origin of,105
+as a secondary cause for,105
+as a secondary source for,105
+as a secondary reason for,105
+as a secondary etiology for,105
+as a secondary origin for,105
+as an secondary cause of,105
+as an secondary source of,105
+as an secondary reason of,105
+as an secondary etiology of,105
+as an secondary origin of,105
+as an secondary cause for,105
+as an secondary source for,105
+as an secondary reason for,105
+as an secondary etiology for,105
+as an secondary origin for,105
+rules the patient out for,101
+ruled the patient out for,101
+ruled the patient out against,101
+did rule the patient out,101
+did rule him out for,101
+did rule her out for,101
+did rule him out against,101
+did rule her out against,101
+can rule the patient out,101
+can rule him out for,101
+can rule her out for,101
+can rule him out against,101
+can rule her out against,101
+adequate to rule him out,101
+adequate to rule her out,101
+adequate to rule out for,101
+sufficient to rule him out,101
+sufficient to rule her out,101
+sufficient to rule out for,101
+sufficient to rule out against,101
+rule the patinet out for,102
+should be ruled out for,102
+may be ruled out for,102
+might be ruled out for,102
+could be ruled out for,102
+will be ruled out for,102
+can be ruled out for,102
+must be ruled out for,102
+ought to be ruled out,104
+is to be ruled out,104
+as the cause of,105
+as the source of,105
+as the reason of,105
+as the etiology of,105
+as the origin of,105
+as the cause for,105
+as the source for,105
+as the reason for,105
+as the etiology for,105
+as the origin for,105
+as a cause of,105
+as a source of,105
+as a reason of,105
+as a etiology of,105
+as a cause for,105
+as a source for,105
+as a reason for,105
+as a etiology for,105
+as an cause of,105
+as an source of,105
+as an reason of,105
+as an etiology of,105
+as an origin of,105
+as an cause for,105
+as an source for,105
+as an reason for,105
+as an etiology for,105
+as an origin for,105
+have been ruled out,103
+has been ruled out,103
+no evidence to suggest,101
+no findings to indicate,101
+no mammographic evidence of,101
+no radiographic evidence of,101
+not known to have,101
+without any evidence of,101
+rules the patient out,101
+rules him out for,101
+rules her out for,101
+ruled the patient out,101
+ruled him out for,101
+ruled her out for,101
+ruled him out against,101
+ruled her out against,101
+did rule out for,101
+did rule out against,101
+did rule him out,101
+did rule her out,101
+can rule out for,101
+can rule out against,101
+can rule him out,101
+can rule her out,101
+adequate to rule out,101
+sufficient to rule out,101
+no significant interval change,100
+rule the patient out,102
+rule him out for,102
+rule her out for,102
+be ruled out for,102
+did not rule out,104
+not been ruled out,104
+should be ruled out,104
+may be ruled out,104
+might be ruled out,104
+could be ruled out,104
+will be ruled out,104
+can be ruled out,104
+must be ruled out,104
+trigger event for,105
+other possibilities of,105
+was ruled out,103
+is ruled out,103
+are ruled out,103
+fails to reveal,101
+no cause of,101
+no complaints of,101
+no new evidence,101
+no other evidence,101
+no findings of,101
+no sign of,101
+no signs of,101
+no suggestion of,101
+not associated with,101
+not complain of,101
+not know of,101
+not to be,101
+patient was not,101
+without indication of,101
+without sign of,101
+rules him out,101
+rules her out,101
+rules out for,101
+ruled him out,101
+ruled her out,101
+ruled out for,101
+ruled out against,101
+did rule out,101
+can rule out,101
+no suspicious change,100
+no significant change,100
+no interval change,100
+no definite change,100
+not certain if,100
+not certain whether,100
+rule him out,102
+rule her out,102
+rule out for,102
+not ruled out,104
+being ruled out,104
+be ruled out,104
+aside from,105
+apart from,105
+secondary to,105
+cause of,105
+cause for,105
+causes of,105
+causes for,105
+source of,105
+source for,105
+sources of,105
+sources for,105
+reason of,105
+reason for,105
+reasons of,105
+reasons for,105
+etiology of,105
+etiology for,105
+origin of,105
+origin for,105
+origins of,105
+origins for,105
+absence of,101
+cannot see,101
+checked for,101
+evaluate for,101
+free of,101
+negative for,101
+never developed,101
+never had,101
+no abnormal,101
+no evidence,101
+no new,101
+no significant,101
+no suspicious,101
+not appear,101
+not appreciate,101
+not demonstrate,101
+not exhibit,101
+not feel,101
+not had,101
+not have,101
+not reveal,101
+not see,101
+rather than,101
+test for,101
+to exclude,101
+unremarkable for,101
+with no,101
+without evidence,101
+rules out,101
+ruled out,101
+no increase,100
+no change,100
+not extend,100
+not cause,100
+not drain,100
+gram negative,100
+without difficulty,100
+not necessarily,100
+not only,100
+rule out,102
+but,105
+however,105
+yet,105
+nevertheless,105
+though,105
+although,105
+still,105
+except,105
+unlikely,103
+free,103
+cannot,101
+declined,101
+declines,101
+denied,101
+denies,101
+denying,101
+no,101
+not,101
+resolved,101
+without,101
+r/o,102
+ro,102

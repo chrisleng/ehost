@@ -1,0 +1,81 @@
+// =================== These are comments ===================
+// [1] All parameters are surround by [ and ]; 
+// [2] Parameters are separated by one or more space line; 
+// [3] Each parameter can have one or more values; 
+// [4] Each value is one line; 
+// [5] Values belong to one specific parameter should be 
+//     connected lines, and no space line between them.
+// ==========================================================
+
+[CONCEPT_LIB]
+
+
+[ANNOTATOR]
+reference
+
+[ENABLE_DIFF_BUTTON]
+true
+
+[ANNOTATOR_ID]
+
+
+[LATEST_MENTION_ID]
+10000
+
+[MASK]
+111111
+
+[UMLS_USERNAME]
+chrisleng
+
+[UMLS_PASSWORD]
+707FC9EE2434D7D7A400268CD243419F
+
+[WORKSPACE_PATH]
+/Users/Chris/Dropbox/01-Office-Chris/03-Uworks/CodingRoom/p-eHOST/0 data/eHOSTWorkspace
+
+[OracleFunction]
+true
+
+[ENABLE_UMLS_FILTER]
+true
+
+[CPT]
+true
+
+[HCPCS]
+true
+
+[ICD10CM]
+true
+
+[ICD10PCS]
+true
+
+[LNC]
+true
+
+[MEDLINEPLUS]
+true
+
+[MeSH]
+true
+
+[MedDRA]
+true
+
+[RXNORM]
+true
+
+[SCTSPA]
+true
+
+[SCTUSX]
+true
+
+[SNOMEDCT]
+true
+
+[UMD]
+true
+

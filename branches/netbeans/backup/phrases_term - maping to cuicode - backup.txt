@@ -1,0 +1,271 @@
+body aches <---> C0231528
+cephalgia <---> C0018681
+chest pain <---> C0008031
+chest pains <---> C0008031
+chill <---> C0085593
+chilling <---> C0085593
+chills <---> C0085593
+cough <---> C0010200
+coughing <---> C0010200
+coughs <---> C0010200
+does cough <---> C0010200
+febrile <---> C0015967
+fever <---> C0015967
+feverish <---> C0015967
+fevers <---> C0015967
+has a temperature <---> C0015967
+head ache <---> C0018681
+head pain <---> C0018682
+headache <---> C0018681
+headache NOS <---> C0018681
+headaches <---> C0018681
+high temperature <---> C0015967
+hyperthermia <---> C0015967
+muscle ache <---> C0231528
+muscle aches <---> C0231528
+muscle discomfort <---> C0231528
+muscle pain <---> C0231528
+muscle pains <---> C0231528
+muscle soreness <---> C0231528
+muscular pain <---> C0231528
+myalgia <---> C0231528
+no terms Present <---> 
+NOS headache <---> C0018681
+pain chest <---> C0008031
+pain head <---> C0018682
+Pain in throat <---> C0242429
+pain muscle <---> C0231528
+pain thoracic <---> C0008031
+pain throat <---> C0242429
+productive cough <---> C0010200
+rigor <---> C0085593
+rigors <---> C0085593
+scratchy throat <---> C0242429
+scratchy throt <---> C0242429
+shaking chills <---> C0085593
+sore throat <---> C0242429
+sore throats <---> C0242429
+sorethroat <---> C0242429
+sweat <---> C0028081
+sweats <---> C0028081
+temperature elevation <---> C0015967
+thoracic pain <---> C0008031
+thorax pain <---> C0008031
+throat discomfort <---> C0242429
+throat pain <---> C0242429
+throat sore <---> C0242429
+throat soreness <---> C0242429
+Administration of sedative <---> 
+administration of sedative <---> 
+Altered consciousness <---> 
+altered consciousness <---> 
+Coma <---> 
+coma <---> 
+Comatose <---> 
+comatose <---> 
+Consciousness awaking loss <---> 
+Consciousness disturbance  <---> 
+Consciousness, Loss of <---> 
+consciousness, loss of <---> 
+diapause <---> 
+Disturbance of consciousness  <---> 
+disturbance of consciousness <---> 
+dormancy <---> 
+Drowsiness <---> 
+drowsiness <---> 
+Drowsy <---> 
+drowsy <---> 
+Exanimation <---> 
+Excessive sleep <---> 
+excessive sleep <---> 
+Excessive sleepiness <---> 
+excessive sleepiness <---> 
+Hypersomnia <---> 
+hypersomnia <---> 
+Hypersomnia NOS <---> 
+hypersomnia NOS <---> 
+Impaired consciousness <---> 
+impaired consciousness <---> 
+INCREASED SLEEPING <---> 
+increased sleeping <---> 
+Increased sleeping <---> 
+Level of consciousness <---> 
+level of consciousness <---> 
+LOC <---> 
+Loss of consciousness <---> 
+loss of consciousness <---> 
+Loss of consiousness <---> 
+Lost consciousness <---> 
+lost consciousness <---> 
+Obtundation <---> 
+Obtundation mental <---> 
+OBTUNDED <---> 
+sedate <---> 
+Sedated <---> 
+sedated <---> 
+Sedated state <---> 
+sedated state <---> 
+Sedation <---> 
+sedation <---> 
+Sedation procedure <---> 
+Sedative therapy <---> 
+sedative therapy <---> 
+sensory depression <---> 
+sleep <---> 
+Sleep <---> 
+Sleep, NOS <---> 
+sleepier <---> 
+Sleepier <---> 
+sleepiest <---> 
+Sleepiest <---> 
+Sleepiness <---> 
+sleepiness <---> 
+sleeping <---> 
+Sleeping <---> 
+Sleeps too much <---> 
+sleeps too much <---> 
+sleepy <---> 
+Sleepy <---> 
+Slow to move <---> 
+slow to move  <---> 
+Sluggishness <---> 
+sluggishness <---> 
+Somnolence <---> 
+somnolence <---> 
+somnolence syndrome <---> 
+Somnolence syndrome <---> 
+somnolent <---> 
+Somnolent <---> 
+Stupor <---> 
+stupor <---> 
+Unawareness <---> 
+unawareness <---> 
+Unconscious <---> 
+unconscious <---> 
+Unconscious State <---> 
+unconscious state <---> 
+Unconscious <---> 
+unconscious <---> 
+Unconsciousness <---> 
+unconsciousness <---> 
+Under sedation <---> 
+under sedation <---> 
+Wakefulness <---> 
+wafefulness <---> 
+sleepy <---> 
+Sleepy <---> 
+sleep disorder <---> 
+Sleep disorder  <---> 
+day time sleeping <---> 
+day time sleeping <---> 
+daytime sleeping <---> 
+difficult to arouse <---> 
+Difficult to arouse <---> 
+Difficulty arousing <---> 
+difficulty arousing <---> 
+difficulty in arousing  <---> 
+Difficulty in arousing <---> 
+tired <---> 
+Tired <---> 
+fatigue <---> 
+Fatigue <---> 
+Fatigued <---> 
+fatigued <---> 
+weak <---> 
+Weak <---> 
+tired <---> 
+Tired <---> 
+somnolent <---> 
+Somnolnet <---> 
+obtundation <---> 
+Obtundation <---> 
+Obtunded <---> 
+obtunded <---> 
+diminished attention <---> 
+Diminished attention <---> 
+AMS  <---> 
+ams <---> 
+altered mental status <---> 
+Altered mental status <---> 
+drunk <---> 
+unarousable <---> 
+Unarousable <---> 
+unresponsive <---> 
+Unresponsive <---> 
+Cancer <---> 
+Colon <---> 
+FAMILY HX <---> 
+FH <---> 
+Rectum <---> 
+adenoma <---> 
+genitourinary <---> 
+Malignancy <---> 
+Colonic polyp <---> 
+Colonic Polyps <---> 
+Family history of <---> 
+UGI <---> 
+colorectal <---> 
+ovarian <---> 
+Malignant neoplasm <---> 
+Mal neo <---> 
+Rectal polyp <---> 
+colorectal cancer <---> 
+Adenomatous polyp <---> 
+Adenomatous Polyps <---> 
+Family medical history <---> 
+small intestine <---> 
+ovary <---> 
+Malignant Neoplasms <---> 
+endometrial <---> 
+upper gastrointestinal <---> 
+Colon and rectum <---> 
+Malignant tumor <---> 
+Family health history <---> 
+Colo-rectal <---> 
+endometrium <---> 
+Diarrhea <---> C0011991
+Stools loose <---> C0011991
+Diarrhea <---> C0011991
+D - Diarrhea <---> C0011991
+Diarrhea finding <---> C0011991
+Diarrhea symptom <---> C0011991
+Diarrhea symptom <---> C0011991
+Diarrhea symptoms <---> C0011991
+Finding of diarrhea <---> C0011991
+Fluid stool <---> C0011991
+Loose bowel motions <---> C0011991
+Loose bowel movement <---> C0011991
+Loose bowels <---> C0011991
+Loose motion <---> C0011991
+Loose stool <---> C0011991
+Loose stool finding <---> C0011991
+LS - Loose stools <---> C0011991
+Observation of diarrhea <---> C0011991
+Passage of loose stools <---> C0011991
+Runny stool <---> C0011991
+runs(diarrhoea) <---> C0011991
+diarrhoea <---> C0011991
+Vomiting <---> C0042963
+Emesis <---> C0042963
+Vomiting <---> C0042963
+Being sick <---> C0042963
+Emesis <---> C0042963
+Finding of vomiting <---> C0042963
+Observation of vomiting <---> C0042963
+regurgitation; gastric contents <---> C0042963
+regurgitation gastric contents <---> C0042963
+Throwing up <---> C0042963
+Vomiting NOS  <---> C0042963
+Vomiting symptom <---> C0042963
+Vomiting symptoms <---> C0042963
+Abdominal Pain <---> C0000737
+Abdominal pain NOS <---> C0000737
+ABD pain <---> C0000737
+Abd. pain <---> C0000737
+ABDOMEN PAIN <---> C0000737
+abdominalgia <---> C0000737
+Abdominal pain, unspecified site <---> C0000737
+Abdominal pain <---> C0000737
+AP - Abdominal pain <---> C0000737
+Gut pain <---> C0000737
+Pain abdo <---> C0000737

@@ -1,0 +1,39 @@
+// =================== These are comments ===================
+// [1] All parameters are surround by [ and ]; 
+// [2] Parameters are separated by one or more space line; 
+// [3] Each parameter can have one or more values; 
+// [4] Each value is one line; 
+// [5] Values belong to one specific parameter should be 
+//     connected lines, and no space line between them.
+// ==========================================================
+
+[CONCEPT_LIB]
+
+
+[ANNOTATOR]
+A2
+
+[ENABLE_DIFF_BUTTON]
+false
+
+[ANNOTATOR_ID]
+
+
+[LATEST_MENTION_ID]
+10000
+
+[MASK]
+111111
+
+[WORKSPACE_PATH]
+/Users/Chris/works/work-va-ehost/data/eHOSTWorkspace
+
+[OracleFunction]
+true
+
+[UMLS_USERNAME]
+chrisleng
+
+[UMLS_PASSWORD]
+2aa88075bf4c964e591cde228e4aaee4
+

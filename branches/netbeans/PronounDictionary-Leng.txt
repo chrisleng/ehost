@@ -1,0 +1,72 @@
+* term		* class		* subclass
+
+*I		Person		I
+
+You		Person		You
+
+We		Person		We
+
+He		Person		He
+
+She		Person		She
+
+Her		Person		She
+
+Me		Person		I
+
+Him		Person		He
+
+Hers		Person		She
+
+His		Person		He
+
+Our		Person		We
+
+Ours		Person		We
+
+Your		Person		You
+
+Yours		Person		You
+
+My		Person		I
+
+Patient		Person		Patient
+
+The patient	Person		Patient
+
+This patient	Person		Patient
+
+Who		Person		WHO::don't link to anything
+
+Myself		Person		I
+
+Yourself		Person		You
+
+Himself		Person		He
+
+Herself		Person		She
+
+Ourselves		Person		We
+Themselves	Person		Themselves
+
+
+This		Pronoun
+
+That		Pronoun
+
+Which		Pronoun
+
+These		Pronoun
+
+Those		Pronoun
+
+It		Pronoun
+
+Them		Pronoun
+
+They		Pronoun
+
+
+*- Theirs		Person	They
+
+*- Their		Person	They

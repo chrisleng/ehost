@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<annotations textSource="test.txt">
+    <annotation>
+        <mention id="ISDS_ILI_VA_Instance_3Party_10001" />
+        <annotator id="ISDS_ILI_VA_Instance_607">3party</annotator>
+        <span start="5" end="19" />
+        <spannedText>fever</spannedText>
+        <creationDate>Tue May 25 13:28:26 PDT 2010</creationDate>
+    </annotation>
+    <classMention id="ISDS_ILI_VA_Instance_10001">
+        <hasSlotMention id="ISDS_ILI_VA_Instance_10002" />
+        <hasSlotMention id="ISDS_ILI_VA_Instance_10003" />
+        <mentionClass id="Problem">fever</mentionClass>
+    </classMention>
+    <stringSlotMention id="ISDS_ILI_VA_Instance_temporality">
+        <mentionSlot id="temporality" />
+        <stringSlotMentionValue value="current" />
+    </stringSlotMention>
+    <stringSlotMention id="ISDS_ILI_VA_Instance_negation">
+        <mentionSlot id="negation" />
+        <stringSlotMentionValue value="possible" />
+    </stringSlotMention>
+</annotations>
+

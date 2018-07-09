@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<annotations textSource="0.txt">
+    <annotation>
+        <mention id="EHOST_Instance_1" />
+        <annotator id="eHOST_2010">reference</annotator>
+        <span start="42" end="51" />
+        <spannedText>Diagnosis</spannedText>
+        <creationDate>Fri Oct 10 11:32:15 MDT 2014</creationDate>
+    </annotation>
+    <classMention id="EHOST_Instance_1">
+        <mentionClass id="negation">Diagnosis</mentionClass>
+    </classMention>
+    <annotation>
+        <mention id="EHOST_Instance_2" />
+        <annotator id="eHOST_2010">reference</annotator>
+        <span start="105" end="111" />
+        <spannedText>access</spannedText>
+        <creationDate>Fri Oct 10 11:32:18 MDT 2014</creationDate>
+    </annotation>
+    <classMention id="EHOST_Instance_2">
+        <mentionClass id="negation">access</mentionClass>
+    </classMention>
+    <annotation>
+        <mention id="EHOST_Instance_3" />
+        <annotator id="eHOST_2010">reference</annotator>
+        <span start="166" end="174" />
+        <spannedText>Behavior</spannedText>
+        <creationDate>Fri Oct 10 11:32:21 MDT 2014</creationDate>
+    </annotation>
+    <classMention id="EHOST_Instance_3">
+        <mentionClass id="degree_of">Behavior</mentionClass>
+    </classMention>
+    <annotation>
+        <mention id="EHOST_Instance_4" />
+        <annotator id="eHOST_2010">reference</annotator>
+        <span start="86" end="94" />
+        <spannedText>Function</spannedText>
+        <creationDate>Fri Oct 10 11:32:25 MDT 2014</creationDate>
+    </annotation>
+    <classMention id="EHOST_Instance_4">
+        <mentionClass id="disease">Function</mentionClass>
+    </classMention>
+</annotations>
+
