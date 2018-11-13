@@ -7,14 +7,6 @@ If you are familiar with NLP, the extensible Human Oracle Suite of Tools (eHOST)
 System development was funded by University of Utah and VA Consortium for Healthcare Informatics Research between 2009-2011.
 
 # Online help: 
-[[Online Guidebook]]: (https://github.com/chrisleng/ehost/blob/master/online-help/start.html)
 
-[I'm an inline-style link](https://www.google.com)
+[Online Guide](https://github.com/chrisleng/ehost/blob/master/online-help/start.html "Online Guideline for eHOST")
 
-[I'm an inline-style link with title](https://www.google.com "Google's Homepage")
-
-[I'm a reference-style link][Arbitrary case-insensitive reference text]
-
-[I'm a relative reference to a repository file](../blob/master/LICENSE)
-
-[You can use numbers for reference-style link definitions][1]
