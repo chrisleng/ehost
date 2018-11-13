@@ -7,4 +7,4 @@ If you are familiar with NLP, the extensible Human Oracle Suite of Tools (eHOST)
 System development was funded by University of Utah and VA Consortium for Healthcare Informatics Research between 2009-2011.
 
 # Online help: 
-[[Online Guidebook]]: https://github.com/chrisleng/ehost/blob/master/online-help/start.html
+[[Online Guidebook]]: (https://github.com/chrisleng/ehost/blob/master/online-help/start.html)
