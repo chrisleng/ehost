@@ -8,3 +8,13 @@ System development was funded by University of Utah and VA Consortium for Health
 
 # Online help: 
 [[Online Guidebook]]: (https://github.com/chrisleng/ehost/blob/master/online-help/start.html)
+
+[I'm an inline-style link](https://www.google.com)
+
+[I'm an inline-style link with title](https://www.google.com "Google's Homepage")
+
+[I'm a reference-style link][Arbitrary case-insensitive reference text]
+
+[I'm a relative reference to a repository file](../blob/master/LICENSE)
+
+[You can use numbers for reference-style link definitions][1]
