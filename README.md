@@ -8,5 +8,5 @@ System development was funded by University of Utah and VA Consortium for Health
 
 # Online help: 
 
-Guide: [Online Guide](http://htmlpreview.github.com/?https://github.com/chrisleng/ehost/blob/master/online-help/start.html "Online Guideline for eHOST")
+Guide: [Online Guide](https://github.com/chrisleng/ehost/wiki "Online Guideline for eHOST")
 
